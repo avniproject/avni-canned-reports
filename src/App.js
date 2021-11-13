@@ -1,5 +1,4 @@
 import './App.css';
-import MyResponsiveBarCanvas from "./sample/MyResponsiveBarCanvas";
 import React from "react";
 import {HomeScreen} from "./screens/HomeScreen";
 
