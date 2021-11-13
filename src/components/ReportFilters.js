@@ -1,18 +1,26 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import DateRange from "./DateRange";
-import {get, isEmpty, isNil} from 'lodash';
+import {get, isEmpty, isNil, pickBy, identity} from 'lodash';
 import moment from "moment";
 import DarkerDisabledTextField from "./DarkerDisabledTextField";
 import Button from "@material-ui/core/Button";
 import {getQueryString} from "../utils";
+import api from "../api";
+import TypeFilters from "./TypeFilters";
+import {Space} from "./Space";
 
 export default function ReportFilters({onApply, disableFilter}) {
     const [openPicker, setOpenPicker] = useState(false);
     const [filters, setFilters] = useState({});
+    const [operationalModules, setOperationalModules] = useState([]);
 
-    const onFilterApply = () => onApply(getQueryString(filters));
+    useEffect(() => {
+        api.fetchOperationalModules().then(om => setOperationalModules(om))
+    }, []);
+
+    const onFilterApply = () => onApply(getQueryString(pickBy(filters, identity)));
 
     const onDateSubmit = (startDate, endDate) => {
         setOpenPicker(false);
@@ -30,16 +38,24 @@ export default function ReportFilters({onApply, disableFilter}) {
     };
 
     return (
-        <div style={{display: 'flex', flexDirection: 'row', margin: 20}}>
-            <DarkerDisabledTextField
-                style={{cursor: 'pointer'}}
-                disabled
-                variant="outlined"
-                onClick={() => setOpenPicker(true)}
-                value={getDisplayDate()}/>
+        <div style={{display: 'flex', flexDirection: 'row', margin: 20, alignItems: 'center'}}>
+            <div>
+                <p>Date</p>
+                <DarkerDisabledTextField
+                    margin="dense" style={{height: 44}}
+                    disabled
+                    variant="outlined"
+                    onClick={() => setOpenPicker(true)}
+                    value={getDisplayDate()}/>
+            </div>
             <DateRange display={openPicker} onOk={onDateSubmit}/>
-            <Button variant="contained" color={'primary'} disabled={disableFilter}
-                    onClick={onFilterApply}>Apply</Button>
+            <Space/>
+            <TypeFilters operationalModules={operationalModules} onValueChange={setFilters}/>
+            <Space size={15}/>
+            <div style={{marginTop: '50px'}}>
+                <Button variant="contained" color={'primary'} disabled={disableFilter}
+                        onClick={onFilterApply}>Apply</Button>
+            </div>
         </div>
     )
 
