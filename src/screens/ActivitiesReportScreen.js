@@ -7,7 +7,7 @@ import ActivityPieChart from "../components/ActivityPieChart";
 
 
 const Activities = ({data}) => {
-    const {completedVisits, registrations, enrolments, daywiseActivities} = data;
+    const {completedVisits, registrations, enrolments, daywiseActivities, cancelledVisits, onTimeVisits, programExits} = data;
     return (
         <Fragment>
             <p>Day wise activities</p>
@@ -16,19 +16,30 @@ const Activities = ({data}) => {
                 <ActivityPieChart
                     data={registrations.data}
                     chartName={'Registrations'}
-                    itemLegendWidth={100}
                     height={350}/>
                 <ActivityPieChart
                     data={enrolments.data}
                     chartName={'Program enrolments'}
-                    itemLegendWidth={100}
                     height={350}/>
             </div>
-            <div>
+            <div style={{display: 'flex', flexDirection: 'row'}}>
                 <ActivityPieChart
                     data={completedVisits.data}
                     chartName={'Visits'}
-                    itemLegendWidth={450}
+                    height={350}/>
+                <ActivityPieChart
+                    data={cancelledVisits.data}
+                    chartName={'Cancelled visits'}
+                    height={350}/>
+            </div>
+            <div style={{display: 'flex', flexDirection: 'row'}}>
+                <ActivityPieChart
+                    data={onTimeVisits.data}
+                    chartName={'On time visits'}
+                    height={350}/>
+                <ActivityPieChart
+                    data={programExits.data}
+                    chartName={'Program exits'}
                     height={350}/>
             </div>
         </Fragment>

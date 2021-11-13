@@ -1,14 +1,14 @@
 import React from 'react';
 import {ResponsivePie} from '@nivo/pie';
 
-export default function ActivityPieChart({data, chartName, height, itemLegendWidth}) {
+export default function ActivityPieChart({data, chartName, height}) {
 
     return (
         <div style={{height: height, flex: 1}}>
             <p>{chartName}</p>
             <ResponsivePie
                 data={data}
-                margin={{top: 40, right: 80, bottom: 80, left: 80}}
+                margin={{top: 20, left: 80, bottom: 80, right: 20}}
                 innerRadius={0.5}
                 padAngle={0.7}
                 cornerRadius={3}
@@ -23,19 +23,17 @@ export default function ActivityPieChart({data, chartName, height, itemLegendWid
                 arcLabelsTextColor={{from: 'color', modifiers: [['darker', 2]]}}
                 legends={[
                     {
-                        anchor: 'right',
+                        anchor: 'top-left',
                         direction: 'column',
                         justify: false,
-                        translateX: 0,
-                        translateY: 44,
-                        itemsSpacing: 0,
-                        itemWidth: itemLegendWidth,
-                        itemHeight: 15,
-                        itemTextColor: '#999',
+                        translateX: -70,
+                        translateY: 0,
+                        itemWidth: 100,
+                        itemHeight: 20,
+                        itemsSpacing: 0.5,
+                        symbolSize: 14,
                         itemDirection: 'left-to-right',
-                        itemOpacity: 1,
-                        symbolSize: 11,
-                        symbolShape: 'circle',
+                        itemTextColor: '#999',
                         effects: [
                             {
                                 on: 'hover',
