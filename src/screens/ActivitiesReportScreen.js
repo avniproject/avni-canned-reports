@@ -4,6 +4,7 @@ import './ActivitiesReportScreen.css'
 import Spinner from "../components/Spinner";
 import ActivityCalender from "../components/ActivityCalender";
 import ActivityPieChart from "../components/ActivityPieChart";
+import ReportFilters from "../components/ReportFilters";
 
 
 const Activities = ({data}) => {
@@ -50,14 +51,22 @@ export default function ActivitiesReportScreen() {
     const [activities, setActivities] = useState({});
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        apis.fetchActivities().then(data => {
+    function fetchData(queryString = "") {
+        setLoading(true);
+        apis.fetchActivities(queryString).then(data => {
             setActivities(data);
             setLoading(false);
         })
+    }
+
+    useEffect(() => {
+        fetchData();
     }, []);
 
     return (
-        loading ? <Spinner/> : <Activities data={activities}/>
+        <Fragment>
+            <ReportFilters onApply={(queryString) => fetchData(queryString)} disableFilter={loading}/>
+            {loading ? <Spinner/> : <Activities data={activities}/>}
+        </Fragment>
     )
 }
