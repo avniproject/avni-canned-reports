@@ -1,20 +1,30 @@
-import React, {Suspense, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import apis from '../api';
 import './ActivitiesReportScreen.css'
-import {map} from 'lodash';
+import Spinner from "../components/Spinner";
+import ActivityCalender from "../components/ActivityCalender";
+
+
+const Activities = ({data}) => {
+    const {completedVisits, registrations, enrolments, daywiseActivities} = data;
+    console.log("daywiseActivities =>>>", daywiseActivities);
+    return (
+        <ActivityCalender data={daywiseActivities.data}/>
+    )
+};
 
 export default function ActivitiesReportScreen() {
     const [activities, setActivities] = useState({});
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        apis.fetchActivities().then(res => setActivities(res.data))
+        apis.fetchActivities().then(data => {
+            setActivities(data);
+            setLoading(false);
+        })
     }, []);
 
     return (
-        <Suspense fallback={<div className="spinner" />}>
-            <div>
-                {map(activities, a => console.log(a))}
-            </div>
-        </Suspense>
+        loading ? <Spinner/> : <Activities data={activities}/>
     )
 }
