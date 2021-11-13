@@ -16,7 +16,7 @@ export default function ActivityCalender({data}) {
                 from={from}
                 to={to}
                 emptyColor="#eeeeee"
-                colors={['#61cdbb', '#97e3d5', '#e8c1a0', '#f47560']}
+                colors={[ '#48ff5e','rgba(56,191,75,0.71)', 'rgba(50,163,69,0.93)', '#236329']}
                 margin={{top: 40, right: 40, bottom: 40, left: 40}}
                 yearSpacing={40}
                 monthBorderColor="#ffffff"
