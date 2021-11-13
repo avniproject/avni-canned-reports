@@ -2428,6 +2428,7 @@ const data = [
 // website examples showcase many properties,
 // you'll often use just a few of them.
 const MyResponsiveBarCanvas = () => (
+    <div style={{ height: 500, flex: 1 }}>
   <ResponsiveBarCanvas
     data={data}
     keys={[
@@ -2532,6 +2533,7 @@ const MyResponsiveBarCanvas = () => (
     isInteractive={true}
     legends={[]}
   />
+    </div>
 );
 
 export default MyResponsiveBarCanvas;
