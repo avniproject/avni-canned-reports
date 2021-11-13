@@ -1,33 +1,42 @@
 import React, {useEffect, useState} from 'react';
 import apis from "../api";
-import Spinner from "../components/Spinner";
+import './DataReportScreen.css'
 
 const FormItem = (form) => {
-  return (<p>{form.name}</p>)
+  return (<option value={form.uuid} key={form.uuid}>{form.name}</option>)
 };
 
-const FormList = ({forms}) => {
+const FormList = ({forms, form, onFormSelect}) => {
   return (
-    <div>
+    <select name="Forms" id="forms" value={form} onChange={(event) => {
+      debugger;
+      onFormSelect(event.target.value)
+    }}>
       {forms.map((form) => FormItem(form))}
-    </div>
+    </select>
   )
 };
 
-
 export default function DataReportScreen() {
-  const [forms, setForms] = useState({});
-  const [loading, setLoading] = useState(true);
+  const [forms, setForms] = useState([]);
+  const [form, setForm] = useState({});
 
   useEffect(() => {
     apis.fetchForms().then(data => {
-      console.log('data', data);
       setForms(data);
-      setLoading(false);
     })
   }, []);
 
+  const setFormHere = (value) => {
+    setForm(forms.find(form => form.uuid === value));
+  };
+
   return (
-    loading ? <Spinner/> : <FormList forms={forms}/>
+    <div className={"container"}>
+      <div className={"header"}>
+        <FormList forms={forms} onFormSelect={setFormHere} form={form.uuid}/>
+        <p>Selected form is {form.name}</p>
+      </div>
+    </div>
   )
 }
