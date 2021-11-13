@@ -1,11 +1,12 @@
 import './App.css';
 import MyResponsiveBarCanvas from "./sample/MyResponsiveBarCanvas";
 import React from "react";
+import {HomeScreen} from "./screens/HomeScreen";
 
 function App() {
   return (
     <div className="App">
-      <MyResponsiveBarCanvas/>
+      <HomeScreen/>
     </div>
   );
 }
