@@ -12,12 +12,25 @@ const Activities = ({data}) => {
         <Fragment>
             <p>Day wise activities</p>
             <ActivityCalender data={daywiseActivities.data}/>
-            <p>Registrations</p>
-            <ActivityPieChart data={registrations.data}/>
-            <p>Program enrolments</p>
-            <ActivityPieChart data={enrolments.data}/>
-            <p>Visits</p>
-            <ActivityPieChart data={completedVisits.data}/>
+            <div style={{display: 'flex', flexDirection: 'row'}}>
+                <ActivityPieChart
+                    data={registrations.data}
+                    chartName={'Registrations'}
+                    itemLegendWidth={100}
+                    height={350}/>
+                <ActivityPieChart
+                    data={enrolments.data}
+                    chartName={'Program enrolments'}
+                    itemLegendWidth={100}
+                    height={350}/>
+            </div>
+            <div>
+                <ActivityPieChart
+                    data={completedVisits.data}
+                    chartName={'Visits'}
+                    itemLegendWidth={450}
+                    height={350}/>
+            </div>
         </Fragment>
     )
 };

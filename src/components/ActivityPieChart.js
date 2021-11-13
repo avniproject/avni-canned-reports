@@ -1,10 +1,11 @@
 import React from 'react';
 import {ResponsivePie} from '@nivo/pie';
 
-export default function ActivityPieChart({data}) {
+export default function ActivityPieChart({data, chartName, height, itemLegendWidth}) {
 
     return (
-        <div style={{height: 300, flex: 1}}>
+        <div style={{height: height, flex: 1}}>
+            <p>{chartName}</p>
             <ResponsivePie
                 data={data}
                 margin={{top: 40, right: 80, bottom: 80, left: 80}}
@@ -20,40 +21,20 @@ export default function ActivityPieChart({data}) {
                 arcLinkLabelsColor={{from: 'color'}}
                 arcLabelsSkipAngle={10}
                 arcLabelsTextColor={{from: 'color', modifiers: [['darker', 2]]}}
-                defs={[
-                    {
-                        id: 'dots',
-                        type: 'patternDots',
-                        background: 'inherit',
-                        color: 'rgba(255, 255, 255, 0.3)',
-                        size: 4,
-                        padding: 1,
-                        stagger: true
-                    },
-                    {
-                        id: 'lines',
-                        type: 'patternLines',
-                        background: 'inherit',
-                        color: 'rgba(255, 255, 255, 0.3)',
-                        rotation: -45,
-                        lineWidth: 6,
-                        spacing: 10
-                    }
-                ]}
                 legends={[
                     {
-                        anchor: 'bottom',
+                        anchor: 'right',
                         direction: 'column',
                         justify: false,
-                        translateX: 300,
-                        translateY: 0,
+                        translateX: 0,
+                        translateY: 44,
                         itemsSpacing: 0,
-                        itemWidth: 200,
-                        itemHeight: 30,
+                        itemWidth: itemLegendWidth,
+                        itemHeight: 15,
                         itemTextColor: '#999',
                         itemDirection: 'left-to-right',
                         itemOpacity: 1,
-                        symbolSize: 18,
+                        symbolSize: 11,
                         symbolShape: 'circle',
                         effects: [
                             {

@@ -3,13 +3,12 @@ import React from 'react';
 
 export default function ActivityCalender({data}) {
 
-    //TODO: fix the max value and from and to year values(right now hard coded)
     return (
-        <div style={{height: 500, flex: 1}}>
+        <div style={{height: 260, flex: 1}}>
             <ResponsiveCalendar
                 data={data}
-                from="2020-03-01"
-                to="2021-07-12"
+                from="2021-01-01"
+                to="2021-12-01"
                 emptyColor="#eeeeee"
                 colors={['#61cdbb', '#97e3d5', '#e8c1a0', '#f47560']}
                 margin={{top: 40, right: 40, bottom: 40, left: 40}}
@@ -18,7 +17,7 @@ export default function ActivityCalender({data}) {
                 dayBorderWidth={2}
                 dayBorderColor="#ffffff"
                 minValue={1}
-                maxValue={600}
+                maxValue={500}
                 legends={[
                     {
                         anchor: 'bottom-right',
