@@ -3,6 +3,7 @@ import React from 'react';
 
 export default function ActivityCalender({data}) {
 
+    //TODO: fix the max value and from and to year values(right now hard coded)
     return (
         <div style={{height: 500, flex: 1}}>
             <ResponsiveCalendar

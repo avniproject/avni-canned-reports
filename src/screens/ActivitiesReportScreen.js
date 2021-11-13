@@ -1,15 +1,24 @@
-import React, {useEffect, useState} from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 import apis from '../api';
 import './ActivitiesReportScreen.css'
 import Spinner from "../components/Spinner";
 import ActivityCalender from "../components/ActivityCalender";
+import ActivityPieChart from "../components/ActivityPieChart";
 
 
 const Activities = ({data}) => {
     const {completedVisits, registrations, enrolments, daywiseActivities} = data;
-    console.log("daywiseActivities =>>>", daywiseActivities);
     return (
-        <ActivityCalender data={daywiseActivities.data}/>
+        <Fragment>
+            <p>Day wise activities</p>
+            <ActivityCalender data={daywiseActivities.data}/>
+            <p>Registrations</p>
+            <ActivityPieChart data={registrations.data}/>
+            <p>Program enrolments</p>
+            <ActivityPieChart data={enrolments.data}/>
+            <p>Visits</p>
+            <ActivityPieChart data={completedVisits.data}/>
+        </Fragment>
     )
 };
 
