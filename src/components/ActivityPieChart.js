@@ -59,9 +59,9 @@ export default function ActivityPieChart({data, chartName, height}) {
                 />
 
     return (
-        <div style={{height: height, flex: 1}}>
-            <Card sx={{minWidth: 275}}>
-                <CardContent style={{height: 400}}>
+        <div style={{height: height+4, flex: 1}}>
+            <Card sx={{width: '90%', height:(height - 4), margin: 4}}>
+                <CardContent style={{height: height}}>
                     <p>{chartName}</p>
                     {isEmpty(data) ? <Empty/> : renderData()}
                 </CardContent>

@@ -10,7 +10,7 @@ import {useLocation} from "react-router";
 const Activities = ({data}) => {
     const {completedVisits, registrations, enrolments, daywiseActivities, cancelledVisits, onTimeVisits, programExits} = data;
     return (
-        <Fragment>
+        <div style={{marginBottom: 20}}>
             <p>Day wise activities</p>
             <ActivityCalender data={daywiseActivities.data}/>
             <div style={{display: 'flex', flexDirection: 'row'}}>
@@ -43,7 +43,7 @@ const Activities = ({data}) => {
                     chartName={'Cancelled visits'}
                     height={350}/>
             </div>
-        </Fragment>
+        </div>
     )
 };
 
