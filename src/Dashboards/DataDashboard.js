@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import apis from "../api";
-import './DataReportScreen.css'
+import './DataDashboard.css'
 import FormList from "../components/FormList";
 import AutoSuggestSingleSelection from "../components/AutoSuggestSingleSelection";
 import {useLocation} from "react-router";
 
-export default function DataReportScreen() {
+export default function DataDashboard() {
   apis.setAuth(useLocation());
 
   const [forms, setForms] = useState([]);
