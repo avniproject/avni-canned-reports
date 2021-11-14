@@ -26,8 +26,8 @@ const apis = {
     fetchActivities: (queryString) => getData(`/report/aggregate/activities?${queryString}`),
     fetchForms: () => getData("/web/forms?size=500").then(res => res._embedded.basicFormDetailses),
     searchConcepts: (queryString) => getData(`/search/concept?${queryString}`),
-    fetchOperationalModules: () => getData('/web/operationalModules')
-
+    fetchOperationalModules: () => getData('/web/operationalModules'),
+    fetchFormData: (form) => getData(`/report/aggregate/codedConcepts?formUUID=${form.uuid}`)
 };
 
 export default apis;
