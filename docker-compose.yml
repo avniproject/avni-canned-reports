@@ -2,7 +2,7 @@ version: '3.1'
 services:
   server:
     container_name: avni-server
-    image: vind3v/avni-server:3.21
+    image: vind3v/avni-server:3.21.1
     ports:
       - "8021:8021"
       - "3000:3000"
