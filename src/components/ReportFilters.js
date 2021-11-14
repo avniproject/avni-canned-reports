@@ -5,11 +5,11 @@ import DateRange from "./DateRange";
 import {get, isEmpty, isNil, pickBy, identity} from 'lodash';
 import moment from "moment";
 import DarkerDisabledTextField from "./DarkerDisabledTextField";
-import Button from "@material-ui/core/Button";
 import {getQueryString} from "../utils";
 import api from "../api";
 import TypeFilters from "./TypeFilters";
 import {Space} from "./Space";
+import Button from "@mui/material/Button";
 
 export default function ReportFilters({onApply, disableFilter}) {
     const [openPicker, setOpenPicker] = useState(false);

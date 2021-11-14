@@ -1,6 +1,5 @@
-import withStyles from "@material-ui/core/styles/withStyles";
-import TextField from "@material-ui/core/TextField/TextField";
-
+import {withStyles} from "@mui/styles";
+import TextField from "@mui/material/TextField";
 
 const DarkerDisabledTextField = withStyles({
     root: {

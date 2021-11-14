@@ -1,7 +1,12 @@
 .container {
   display: flex;
+  flex: 1;
 }
 
 .header {
   flex-direction: row;
+}
+
+.item {
+  flex: 1;
 }

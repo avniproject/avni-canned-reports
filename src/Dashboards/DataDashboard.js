@@ -2,41 +2,30 @@ import React, {useEffect, useState} from 'react';
 import apis from "../api";
 import './DataDashboard.css'
 import FormList from "../components/FormList";
-import AutoSuggestSingleSelection from "../components/AutoSuggestSingleSelection";
 import {useLocation} from "react-router";
+import ConceptSelect from "../components/ConceptSelect";
 
 export default function DataDashboard() {
   apis.setAuth(useLocation());
+    const [forms, setForms] = useState([]);
+    const [form, setForm] = useState({});
+    const [concept, setConcept] = useState({});
+    const setFormInState = (value) => {
+        setForm(forms.find(form => form.uuid === value));
+    };
 
-  const [forms, setForms] = useState([]);
-  const [form, setForm] = useState({});
-  const [concept, setConcept] = useState({name: ''});
-  const setFormInState = (value) => {
-    setForm(forms.find(form => form.uuid === value));
-  };
+    useEffect(() => {
+        apis.fetchForms().then(data => {
+            setForms(data);
+        })
+    }, []);
 
-  useEffect(() => {
-    apis.fetchForms().then(data => {
-      setForms(data);
-    })
-  }, []);
-
-  return (
-    <div className={"container"}>
-      <div className={"header"}>
-        <FormList forms={forms} onFormSelect={setFormInState} form={form.uuid}/>
-        <p>Selected form is {form.name}</p>
-        <input type={"text"} value={concept}></input>
-        <AutoSuggestSingleSelection
-          visibility={false}
-          showAnswer={concept}
-          onChangeAnswerName={setConcept}
-          finalReturn={true}
-          index={0}
-          label="Concept"
-          placeholder={"abc"}
-        />
-      </div>
-    </div>
-  );
+    return (
+        <div className={"container"}>
+            <div className={"header"}>
+                <FormList forms={forms} onFormSelect={setFormInState} form={form.uuid} className={"item"}/>
+                <ConceptSelect onSelect={setConcept}/>
+            </div>
+        </div>
+    );
 }

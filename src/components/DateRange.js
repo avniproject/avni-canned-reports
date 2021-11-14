@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
-import Modal from "@material-ui/core/Modal";
 import {DateRangePicker} from "react-date-range";
-import Button from "@material-ui/core/Button";
+import Modal from "@mui/material/Modal";
+import Button from "@mui/material/Button";
 
 export default function DateRange({display, onOk}) {
     const [startDate, setStartDate] = useState(new Date());
