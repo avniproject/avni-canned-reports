@@ -9,4 +9,5 @@
 
 .item {
   flex: 1;
+  margin-right: 24px;
 }

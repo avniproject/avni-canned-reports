@@ -22,7 +22,7 @@ export default function DataDashboard() {
 
     return (
         <div style={{display: 'flex', flexDirection: 'row', margin: 20, alignItems: 'center'}}>
-            <FormList forms={forms} onFormSelect={setFormInState} form={form.uuid} className={"item"}/>
+            <FormList forms={forms} onFormSelect={setFormInState} form={form.uuid}/>
             <ConceptSelect onSelect={setConcept}/>
         </div>
     );

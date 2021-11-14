@@ -10,8 +10,8 @@ const FormItem = (form) => {
 
 const FormList = ({forms, form, onFormSelect}) => {
     return (
-        <FormControl variant="standard" sx={{m: 1}}>
-            <InputLabel id="demo-simple-select-standard-label">Age</InputLabel>
+        <FormControl variant="standard" sx={{m: 1, minWidth: 200}} style={{marginRight: "16px"}}>
+            <InputLabel>Choose a Form</InputLabel>
             <Select
                 autoWidth
                 label={"Form"}
