@@ -25,10 +25,9 @@ Setting up the app this way will allow avni-server running in development mode t
 ### Production
 This app is expected to be run as part of [avni-webapp](https://github.com/avniproject/avni-webapp/). It is installed as an npm package there and integrated into the Avni ecosystem. Many facilities such as the login page etc, are part of avni-webapp. 
 
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Release
+Publish as npm module. 
+```shell script
+make release
+make publish
+```
