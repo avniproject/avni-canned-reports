@@ -12,14 +12,19 @@ Avni is an open source field service delivery and data collection platform for n
 [Website](https://avniproject.org/) • [Getting Started](https://avniproject.org/getting-started/) • [Docs](https://avni.readme.io/docs) • [Case studies](https://avniproject.org/case-studies) • [Blog](https://avniproject.org/blog) • [Gitter](https://gitter.im/avniproject/avni)  • [Twitter](https://twitter.com/avniproject)
 
 ## Why Avni-canned-reports
-Analytics from data captured via Avni can be derived by connecting any BI tool e.g. Metabase to either Avni database or APIs. However, this has certain limitations 1. Setting up analytics using these BI tool requirers the know-how of these tools. Many organisations using Avni don't have these expertise and they need to depend upon software partners to set this up for them. This has time and cost implications. 2. Users need a separate set of credentials to login to the BI tool which introduces friction. Tools like Metabase provide SSO part of enterprise edition which is again very expensive. 
+Analytics from data captured via Avni can be derived by connecting any BI tool e.g. Metabase to either Avni database or APIs. However, this has certain limitations 
+1. Setting up analytics using these BI tool requirers the know-how of these tools. Many organisations using Avni don't have these expertise and they need to depend upon software partners to set this up for them. This has time and cost implications. 
+2. Users need a separate set of credentials to login to the BI tool which introduces friction. Tools like Metabase provide SSO part of enterprise edition which is again very expensive. 
+
 So introducing Avni canned reports where it understands the domain and smartly gives out-of the box insights which can be a good starter for organisations to start reviewing and making sense of their data without any extra cost. It also gives ability to explore data based on dimensions and pre-defined filters required in the domain.
 
 ## Current State and Roadmap
 We currently plan to introduce some out of the box dashboards
+
 1. Activities - To give an overview of work done by Avni's data model, that is Registration, Enrolments, Exits, Visits, Visits done on time and Visits cancelled. [Completed]
 2. Data - To give overall distribution of data captured across form submissions e.g. Distribution by Occuptation, Distribution by Gender. [Completed]
 3. HR - To give a picture of usage of the app from users lens. [To be done soon]
+
 We will continue to review the uptake of this and introduce more features like ability to mention derived measures and create custom dashboards.
 
 ## Development
