@@ -8,6 +8,7 @@ export default function Sidebar() {
             <a href={"/"}>Activities</a>
             <a href={"/data"}>Data</a>
             <a href={"/hr"}>HR</a>
+            <a href={"/test"}>Test</a>
         </div>
     )
 }
