@@ -1,62 +1,153 @@
-# Check https://circleci.com/docs/2.0/language-javascript/ for more details
-version: 2
-defaults: &defaults
-  working_directory: ~/repo
-  docker:
-    - image: circleci/node:14.16.0
+version: 2.1
+commands:
+  deploy:
+    description: "Deployment of avni-canned-reports"
+    parameters:
+      to:
+        type: string
+        default: "staging"
+    steps:
+      - attach_workspace:
+          at: ~/artifacts
+
+      - run:
+          name: Install dependencies
+          command: |
+            sudo apt-get -y -qq update
+            sudo apt-get -y -qq install make openssl python3-pip
+            sudo pip3 install awscli --upgrade
+
+      - run: curl -L https://github.com/OpenCHS/infra/archive/master.zip >> infra.zip
+
+      - run: unzip infra.zip; mv infra-master infra; rm -rf infra.zip; cd ~/
+
+      - run: cp -f ~/artifacts/build_version ~/infra/webapp/version/build_version
+
+      - run: cd ~/infra; make install; make << parameters.to >>-webapp-create;
 
 jobs:
-  build:
-    <<: *defaults
+  app_test:
+    docker:
+      - image: circleci/node:14.16.0
+
+    working_directory: ~/avni-canned-reports
+
     steps:
       - checkout
 
       - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            - v1-dependencies-
+          key: dependency-cache-{{ checksum "package.json" }}
 
       - run: yarn install
 
-      - run: yarn build && yarn test
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+
+      - run: yarn test
+
+  app_build:
+    docker:
+      - image: circleci/node:10.15.1
+
+    working_directory: ~/avni-canned-reports
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+
+      - run: yarn install
 
       - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
           paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+            - ./node_modules
+
+      - run: yarn run build
+
+      - run: cd build; zip -r ../build.zip *
+
+      - run: mkdir -p ~/artifacts
+
+      - run: echo $CIRCLE_BUILD_NUM > ~/artifacts/build_version
+
+      - run: cp ~/avni-canned-reports/build.zip ~/artifacts/
 
       - persist_to_workspace:
-          root: ~/repo
-          paths: .
-  publish:
-    <<: *defaults
-    steps:
-      - attach_workspace:
-          at: ~/repo
-      - run:
-          name: Authenticate with registry
-          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
-      - run:
-          name: Publish package
-          command: npm publish
+          root: ~/artifacts
+          paths:
+            - build_version
+
+      - store_artifacts:
+          path: ~/artifacts
+
+#  STAGING_deploy:
+#    docker:
+#      - image: circleci/node:14.16.0
+#    working_directory: ~/
+#    steps:
+#      - deploy:
+#          to: staging
+#
+#  UAT_deploy:
+#    docker:
+#      - image: circleci/node:14.16.0
+#    working_directory: ~/
+#    steps:
+#      - deploy:
+#          to: uat
+#
+#  PRERELEASE_deploy:
+#    docker:
+#      - image: circleci/node:14.16.0
+#    working_directory: ~/
+#    steps:
+#      - deploy:
+#          to: prerelease
+#
+#  PRODUCTION_deploy:
+#    docker:
+#      - image: circleci/node:14.16.0
+#    working_directory: ~/
+#    steps:
+#      - deploy:
+#          to: production
 
 workflows:
   version: 2
-  test_deploy:
+  test_and_build:
     jobs:
-      - build:
-          filters:
-            tags:
-              only: /^v.*/
-      - publish:
+      - app_test
+      - app_build:
           requires:
-            - build
-          filters:
-            tags:
-              only: /^v.*/
-            branches:
-              ignore: /.*/
-
-notify:
-  webhooks:
-    - url: https://webhooks.gitter.im/e/0fdffde721194986f2a0
+            - app_test
+#      - STAGING_deploy:
+#          filters:
+#            branches:
+#              only: master
+#          requires:
+#            - app_build
+#      - UAT_approve:
+#          type: approval
+#          requires:
+#            - app_build
+#      - UAT_deploy:
+#          requires:
+#            - UAT_approve
+#      - PRERELEASE_approve:
+#          type: approval
+#          requires:
+#            - app_build
+#      - PRERELEASE_deploy:
+#          requires:
+#            - PRERELEASE_approve
+#      - PRODUCTION_approve:
+#          type: approval
+#          requires:
+#            - app_build
+#      - PRODUCTION_deploy:
+#          requires:
+#            - PRODUCTION_approve
