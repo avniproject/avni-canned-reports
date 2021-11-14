@@ -20,7 +20,7 @@ REACT_APP_DEV_ENV_USER=user@org yarn start
 Setting up the app this way will allow avni-server running in development mode to recognise the user.
 
 ### Production
-This app is expected to be run in  
+This app is expected to be run as part of [avni-webapp](https://github.com/avniproject/avni-webapp/). It is installed as an npm package there and integrated into the Avni ecosystem. Many facilities such as the login page etc, are part of avni-webapp. 
 
 ### `yarn build`
 
