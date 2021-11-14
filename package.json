@@ -1,6 +1,6 @@
 {
   "name": "avni-canned-reports",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "proxy": "http://localhost:8021",
   "dependencies": {
