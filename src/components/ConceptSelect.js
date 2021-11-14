@@ -83,16 +83,14 @@ const ConceptSelect = ({onSelect}) => {
     const [suggestions, setSuggestions] = useState([]);
 
     const onSuggestionsFetchRequested = ({value}) => {
-        api.searchConcepts(`name=${value}`).then(setSuggestions);
+        api.searchConcepts(`name=${value}&dataType=Coded`).then(setSuggestions);
     };
 
     const onChange = (event, stuff) => {
-        console.log('setting value to ', stuff.newValue);
         setValue(stuff.newValue);
     };
 
     const onSuggestionSelected = (event, { suggestion, suggestionValue}) => {
-        console.log('suggestion', suggestion, suggestionValue);
         setValue(suggestionValue);
         onSelect(suggestion);
     };
