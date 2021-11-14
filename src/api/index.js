@@ -2,14 +2,14 @@ import axios from "axios";
 const devEnvUserName = process.env.REACT_APP_DEV_ENV_USER;
 
 const fillHeaders  = () => {
-    const headers = {}
+    const headers = {};
     if (devEnvUserName) {
         headers['USER-NAME'] = devEnvUserName;
     }
     return headers;
 };
 
-export default {
+const apis = {
     fetchActivities: (querySting) => axios.get(`/report/aggregate/activities?${querySting}`)
         .then(res => res.data),
     fetchForms: () => axios.get("/web/forms?size=500", {headers: fillHeaders()})
@@ -19,3 +19,5 @@ export default {
     fetchOperationalModules: () => axios.get('/web/operationalModules')
         .then(res => res.data)
 };
+
+export default apis;
