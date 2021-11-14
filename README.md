@@ -2,13 +2,22 @@
 
 In the project directory, you can run:
 
-### `yarn start`
+### Development
 
-Runs the app in the development mode.\
+To start the app, run  `yarn start`. 
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+#### Configuration
+The app requires a working avni-server instance. The default is set in package.json to a local instance.\
+ To run in dev mode, change the value in package.json. 
+ 
+If you want to run as a specific user, run the app with the parameter REACT_APP_DEV_ENV_USER
+eg: 
+```javascript
+REACT_APP_DEV_ENV_USER=user@org yarn start
+```
+
+Setting up the app this way will allow avni-server running in development mode to recognise the user. 
 
 ### `yarn build`
 
