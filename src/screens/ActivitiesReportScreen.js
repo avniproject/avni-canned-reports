@@ -25,12 +25,12 @@ const Activities = ({data}) => {
             </div>
             <div style={{display: 'flex', flexDirection: 'row'}}>
                 <ActivityPieChart
-                    data={completedVisits.data}
-                    chartName={'Visits'}
+                    data={programExits.data}
+                    chartName={'Program exits'}
                     height={350}/>
                 <ActivityPieChart
-                    data={cancelledVisits.data}
-                    chartName={'Cancelled visits'}
+                    data={completedVisits.data}
+                    chartName={'Visits'}
                     height={350}/>
             </div>
             <div style={{display: 'flex', flexDirection: 'row'}}>
@@ -39,8 +39,8 @@ const Activities = ({data}) => {
                     chartName={'On time visits'}
                     height={350}/>
                 <ActivityPieChart
-                    data={programExits.data}
-                    chartName={'Program exits'}
+                    data={cancelledVisits.data}
+                    chartName={'Cancelled visits'}
                     height={350}/>
             </div>
         </Fragment>
