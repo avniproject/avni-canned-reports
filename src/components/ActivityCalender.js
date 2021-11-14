@@ -1,6 +1,6 @@
 import {ResponsiveCalendar} from '@nivo/calendar'
 import React from 'react';
-import {maxBy, filter} from 'lodash';
+import {maxBy, filter, get, defaultTo} from 'lodash';
 import moment from "moment";
 
 export default function ActivityCalender({data}) {
@@ -23,7 +23,7 @@ export default function ActivityCalender({data}) {
                 dayBorderWidth={2}
                 dayBorderColor="#ffffff"
                 minValue={1}
-                maxValue={maxValue.value}
+                maxValue={defaultTo(get(maxValue, 'value'), 0)}
                 legends={[
                     {
                         anchor: 'bottom-right',

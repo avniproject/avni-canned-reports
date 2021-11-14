@@ -8,6 +8,8 @@ const DarkerDisabledTextField = withStyles({
         "& .MuiInputBase-root.Mui-disabled": {
             color: "#000"
         },
+        marginTop: 0,
+        marginBottom: 0
     }
 })(TextField);
 

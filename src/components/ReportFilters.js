@@ -42,7 +42,7 @@ export default function ReportFilters({onApply, disableFilter}) {
             <div>
                 <p>Date</p>
                 <DarkerDisabledTextField
-                    margin="dense" style={{height: 44}}
+                    margin="dense" style={{height: 40}}
                     disabled
                     variant="outlined"
                     onClick={() => setOpenPicker(true)}

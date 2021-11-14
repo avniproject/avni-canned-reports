@@ -1,6 +1,5 @@
 import React, {Fragment, useEffect, useState} from 'react';
 import apis from '../api';
-import './ActivitiesReportScreen.css'
 import Spinner from "../components/Spinner";
 import ActivityCalender from "../components/ActivityCalender";
 import ActivityPieChart from "../components/ActivityPieChart";

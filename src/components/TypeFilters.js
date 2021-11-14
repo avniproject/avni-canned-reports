@@ -2,6 +2,7 @@ import React, {Fragment} from 'react';
 import Select from 'react-select';
 import _ from 'lodash';
 
+//TODO: make program and encounter type filter dependent
 export default function TypeFilters({operationalModules, onValueChange}) {
     const [selectedSubjectTypes, setSelectedSubjectTypes] = React.useState([]);
     const [selectedPrograms, setSelectedPrograms] = React.useState([]);
@@ -41,7 +42,7 @@ export default function TypeFilters({operationalModules, onValueChange}) {
                     value={selectedSubjectTypes}
                 />
             </div>
-            <div style={{width: '300px', marginLeft: '10px'}}>
+            <div style={{width: '300px', marginLeft: '15px'}}>
                 <p>Programs</p>
                 <Select
                     isMulti
@@ -52,7 +53,7 @@ export default function TypeFilters({operationalModules, onValueChange}) {
                     value={selectedPrograms}
                 />
             </div>
-            <div style={{width: '300px', marginLeft: '10px'}}>
+            <div style={{width: '300px', marginLeft: '15px'}}>
                 <p>Encounter types</p>
                 <Select
                     isMulti
