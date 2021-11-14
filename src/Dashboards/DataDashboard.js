@@ -6,7 +6,7 @@ import {useLocation} from "react-router";
 import ConceptSelect from "../components/ConceptSelect";
 
 export default function DataDashboard() {
-  apis.setAuth(useLocation());
+    apis.setAuth(useLocation());
     const [forms, setForms] = useState([]);
     const [form, setForm] = useState({});
     const [concept, setConcept] = useState({});
@@ -21,11 +21,9 @@ export default function DataDashboard() {
     }, []);
 
     return (
-        <div className={"container"}>
-            <div className={"header"}>
-                <FormList forms={forms} onFormSelect={setFormInState} form={form.uuid} className={"item"}/>
-                <ConceptSelect onSelect={setConcept}/>
-            </div>
+        <div style={{display: 'flex', flexDirection: 'row', margin: 20, alignItems: 'center'}}>
+            <FormList forms={forms} onFormSelect={setFormInState} form={form.uuid} className={"item"}/>
+            <ConceptSelect onSelect={setConcept}/>
         </div>
     );
 }
