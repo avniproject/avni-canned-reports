@@ -3,15 +3,31 @@ import axios from "axios";
 const devEnvUserName = process.env.REACT_APP_DEV_ENV_USER;
 axios.defaults.headers.common["user-name"] = devEnvUserName;
 
+const setAuth = (location) => {
+    const authToken = new URLSearchParams(location.search).get('authToken');
+    if (authToken) {
+        localStorage.setItem("authToken", authToken);
+    }
+};
+
+const get = (url) => {
+    const headers = {};
+    let authToken = localStorage.getItem("authToken");
+    if (authToken) {
+        headers['AUTH-TOKEN'] = authToken;
+    }
+    return axios.get(url, {headers});
+};
+
+const getData = (url) => get(url).then(res => res.data);
+
 const apis = {
-    fetchActivities: (querySting) => axios.get(`/report/aggregate/activities?${querySting}`)
-        .then(res => res.data),
-    fetchForms: () => axios.get("/web/forms?size=500")
-      .then(res => res.data._embedded.basicFormDetailses),
-    searchConcepts: (queryString) => axios.get(`/search/concept?${queryString}`)
-      .then(res => (res.data)),
-    fetchOperationalModules: () => axios.get('/web/operationalModules')
-        .then(res => res.data)
+    setAuth,
+    fetchActivities: (queryString) => getData(`/report/aggregate/activities?${queryString}`),
+    fetchForms: () => getData("/web/forms?size=500").then(res => res._embedded.basicFormDetailses),
+    searchConcepts: (queryString) => getData(`/search/concept?${queryString}`),
+    fetchOperationalModules: () => getData('/web/operationalModules')
+
 };
 
 export default apis;

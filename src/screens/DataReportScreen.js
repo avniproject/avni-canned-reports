@@ -3,8 +3,11 @@ import apis from "../api";
 import './DataReportScreen.css'
 import FormList from "../components/FormList";
 import AutoSuggestSingleSelection from "../components/AutoSuggestSingleSelection";
+import {useLocation} from "react-router";
 
 export default function DataReportScreen() {
+  apis.setAuth(useLocation());
+
   const [forms, setForms] = useState([]);
   const [form, setForm] = useState({});
   const [concept, setConcept] = useState({name: ''});

@@ -4,6 +4,7 @@ import Spinner from "../components/Spinner";
 import ActivityCalender from "../components/ActivityCalender";
 import ActivityPieChart from "../components/ActivityPieChart";
 import ReportFilters from "../components/ReportFilters";
+import {useLocation} from "react-router";
 
 
 const Activities = ({data}) => {
@@ -47,6 +48,9 @@ const Activities = ({data}) => {
 };
 
 export default function ActivitiesReportScreen() {
+
+    apis.setAuth(useLocation());
+
     const [activities, setActivities] = useState({});
     const [loading, setLoading] = useState(true);
 
