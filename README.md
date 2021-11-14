@@ -2,8 +2,25 @@
 
 
 ## avni-canned-reports
-This project provides default analytics for organisations that run Avni. It is integrated to the main web application of Avni - avni-webapp. While this can be run standalone against a dev-mode server, or a production server if you can generate a JWT-token and pass it in the url with the parameter "authToken", the primary purpose is to keep it integrated to the Avni web console. 
+This project provides default analytics for organisations that run Avni. It is integrated to the main web application of Avni - avni-webapp.
 
+![Avni canned repo](https://user-images.githubusercontent.com/426156/141683178-de08f749-1f26-4998-9a92-1fcb88403533.png)
+
+## Context
+Avni is an open source field service delivery and data collection platform for non-profits and governments in all sectors — health, water, education, social service
+
+[Website](https://avniproject.org/) • [Getting Started](https://avniproject.org/getting-started/) • [Docs](https://avni.readme.io/docs) • [Case studies](https://avniproject.org/case-studies) • [Blog](https://avniproject.org/blog) • [Gitter](https://gitter.im/avniproject/avni)  • [Twitter](https://twitter.com/avniproject)
+
+## Why Avni-canned-reports
+Analytics from data captured via Avni can be derived by connecting any BI tool e.g. Metabase to either Avni database or APIs. However, this has certain limitations 1. Setting up analytics using these BI tool requirers the know-how of these tools. Many organisations using Avni don't have these expertise and they need to depend upon software partners to set this up for them. This has time and cost implications. 2. Users need a separate set of credentials to login to the BI tool which introduces a friction. Tools like Metabase provide SSO part of enterprise edition which is again very expensive. 
+So introducing Avni canned reports where it understands the domain and smartly gives out-of the box insights which can be a good starter for organisations to start reviewing and making sense of their data without any extra cost. It also gives ability to explore data based on dimensions and pre-defined filters required in the domain.
+
+## Current State and Roadmap
+We currently plan to introduce some out of the box dashboards
+1. Activities - To give an overview of work done by Avni's data model, that is Registration, Enrolments, Exits, Visits, Visits done on time and Visits cancelled. [Completed]
+2. Data - To give overall distribution of data captured across form submissions e.g. Distribution by Occuptation, Distribution by Gender. [Completed]
+3. HR - To give a picture of usage of the app from users lens. [To be done soon]
+We will continue to review the uptake of this and introduce more features like ability to mention derived measures and create custom dashboards.
 
 ### Development
 
@@ -34,3 +51,4 @@ make publish
 
 ### Using Docker
 There's docker-compose file included in the root directory. To run it on local simple checkout the project and run `docker-compose up` to run server and db containers.Use `docker-compose down` to destroy the containers. Web app can be accessed at http://localhost:8021
+The docker images includes the db, server, webapp and avni-canned-analytics webapp. The webapp has admin, app designer and data entry app to be able to configure the app, enter tranactional data and then review the analytics.
