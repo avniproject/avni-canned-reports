@@ -17,7 +17,10 @@ eg:
 REACT_APP_DEV_ENV_USER=user@org yarn start
 ```
 
-Setting up the app this way will allow avni-server running in development mode to recognise the user. 
+Setting up the app this way will allow avni-server running in development mode to recognise the user.
+
+### Production
+This app is expected to be run in  
 
 ### `yarn build`
 
