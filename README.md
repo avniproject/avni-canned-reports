@@ -31,3 +31,7 @@ Publish as npm module.
 make release
 make publish
 ```
+
+### Using Docker
+There's docker-compose file included in the root directory. To run it on local simple checkout the project and run `docker-compose up` to run server and db containers.
+Use `docker-compose down` to destroy the containers.
