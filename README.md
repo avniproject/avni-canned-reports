@@ -2,7 +2,7 @@
 
 
 ## avni-canned-reports
-This project provides default analytics for organisations that run Avni. It is integrated to the main web application of Avni - avni-webapp. While this can be run standalone against a dev-mode server, or a production server if you can generate a JWT-token and pass it in the url with the parameter "auth-token", the primary purpose is to keep it integrated to the Avni web console. 
+This project provides default analytics for organisations that run Avni. It is integrated to the main web application of Avni - avni-webapp. While this can be run standalone against a dev-mode server, or a production server if you can generate a JWT-token and pass it in the url with the parameter "authToken", the primary purpose is to keep it integrated to the Avni web console. 
 
 
 ### Development
