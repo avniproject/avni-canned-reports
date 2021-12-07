@@ -28,11 +28,11 @@ function HomeScreen(props) {
 
     const menuItems = [{
         name : 'Activities',
-        link : '/',
+        link : '/analytics/activities',
         icon : <DeleteIcon/>,
     },{
         name : 'Data',
-        link : '/data',
+        link : '/analytics/data',
         icon : <DeleteIcon/>
     }];
     const drawer = (

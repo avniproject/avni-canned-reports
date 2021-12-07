@@ -6,9 +6,9 @@ import HRDashboard from "../Dashboards/HRDashboard";
 
 export default function Routes() {
     return (
-        <Router>
+        <Router basename="/analytics">
             <RRRoutes>
-                <Route exact path="/" element={<ActivitiesDashboard/>}>
+                <Route exact path="/activities" element={<ActivitiesDashboard/>}>
                 </Route>
                 <Route path="/data" element={<DataDashboard/>}>
                 </Route>

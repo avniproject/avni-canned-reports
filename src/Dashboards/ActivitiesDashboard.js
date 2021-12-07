@@ -49,8 +49,6 @@ const Activities = ({data}) => {
 
 export default function ActivitiesReportScreen() {
 
-    apis.setAuth(useLocation());
-
     const [activities, setActivities] = useState({});
     const [loading, setLoading] = useState(true);
 

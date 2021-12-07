@@ -8,7 +8,6 @@ import ActivityPieChart from "../components/ActivityPieChart";
 import _ from 'lodash';
 
 export default function DataDashboard() {
-    apis.setAuth(useLocation());
     const [forms, setForms] = useState([]);
     const [form, setForm] = useState({});
     const [graphData, setGraphData] = useState([]);
