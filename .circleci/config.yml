@@ -5,7 +5,7 @@ commands:
     parameters:
       to:
         type: string
-        default: "staging"
+        default: "ssh.staging.openchs.org"
     steps:
       - attach_workspace:
           at: ~/artifacts
@@ -17,13 +17,19 @@ commands:
             sudo apt-get -y -qq install make openssl python3-pip
             sudo pip3 install awscli --upgrade
 
-      - run: curl -L https://github.com/OpenCHS/infra/archive/master.zip >> infra.zip
+      - run:
+          name: Copy artifacts to server
+          command: |
+            scp -o StrictHostKeyChecking=no ~/artifacts/build.zip ec2-user@<< parameters.hostname >>:/tmp
 
-      - run: unzip infra.zip; mv infra-master infra; rm -rf infra.zip; cd ~/
-
-      - run: cp -f ~/artifacts/build_version ~/infra/webapp/version/build_version
-
-      - run: cd ~/infra; make install; make << parameters.to >>-webapp-create;
+      - run:
+          name: Deploy to server
+          command: |
+            ssh -o StrictHostKeyChecking=no ec2-user@<< parameters.hostname >> \<< EOF
+            sudo rm -rf /opt/avni-canned-reports
+            sudo unzip -qq /tmp/build.zip -d /opt/avni-canned-reports/
+            sudo rm -rf /tmp/build.zip
+            EOF
 
 jobs:
   app_test:
@@ -84,37 +90,21 @@ jobs:
       - store_artifacts:
           path: ~/artifacts
 
-#  STAGING_deploy:
-#    docker:
-#      - image: circleci/node:14.16.0
-#    working_directory: ~/
-#    steps:
-#      - deploy:
-#          to: staging
-#
-#  UAT_deploy:
-#    docker:
-#      - image: circleci/node:14.16.0
-#    working_directory: ~/
-#    steps:
-#      - deploy:
-#          to: uat
-#
-#  PRERELEASE_deploy:
-#    docker:
-#      - image: circleci/node:14.16.0
-#    working_directory: ~/
-#    steps:
-#      - deploy:
-#          to: prerelease
-#
-#  PRODUCTION_deploy:
-#    docker:
-#      - image: circleci/node:14.16.0
-#    working_directory: ~/
-#    steps:
-#      - deploy:
-#          to: production
+  STAGING_deploy:
+    docker:
+      - image: circleci/node:14.16.0
+    working_directory: ~/
+    steps:
+      - deploy:
+          hostname: "ssh.staging.openchs.org"
+
+  PRODUCTION_deploy:
+    docker:
+      - image: circleci/node:14.16.0
+    working_directory: ~/
+    steps:
+      - deploy:
+          hostname: "ssh.server.openchs.org"
 
 workflows:
   version: 2
@@ -124,30 +114,16 @@ workflows:
       - app_build:
           requires:
             - app_test
-#      - STAGING_deploy:
-#          filters:
-#            branches:
-#              only: master
-#          requires:
-#            - app_build
-#      - UAT_approve:
-#          type: approval
-#          requires:
-#            - app_build
-#      - UAT_deploy:
-#          requires:
-#            - UAT_approve
-#      - PRERELEASE_approve:
-#          type: approval
-#          requires:
-#            - app_build
-#      - PRERELEASE_deploy:
-#          requires:
-#            - PRERELEASE_approve
-#      - PRODUCTION_approve:
-#          type: approval
-#          requires:
-#            - app_build
-#      - PRODUCTION_deploy:
-#          requires:
-#            - PRODUCTION_approve
+      - STAGING_deploy:
+          filters:
+            branches:
+              only: master
+          requires:
+            - app_build
+      - PRODUCTION_approve:
+          type: approval
+          requires:
+            - app_build
+      - PRODUCTION_deploy:
+          requires:
+            - PRODUCTION_approve
