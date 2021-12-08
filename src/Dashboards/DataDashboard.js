@@ -4,7 +4,7 @@ import './DataDashboard.css'
 import FormList from "../components/FormList";
 import Spinner from "../components/Spinner";
 import ActivityPieChart from "../components/ActivityPieChart";
-import _ from 'lodash';
+import {chunk, isEmpty} from 'lodash';
 
 export default function DataDashboard() {
     const [forms, setForms] = useState([]);
@@ -24,7 +24,7 @@ export default function DataDashboard() {
     };
 
     useEffect(() => {
-        if (!form) {
+        if (isEmpty(form)) {
             return;
         }
         setLoading(true);
@@ -69,7 +69,7 @@ export default function DataDashboard() {
             {loading && <Spinner/>}
             {error && <p>Something went wrong. Please see console for more details. </p>}
             <div>
-                {_.chunk(graphData, 2).map(renderPair)}
+                {chunk(graphData, 2).map(renderPair)}
                 {graphData.length === 0 && loading === false && form && <p>No Data Available</p>}
             </div>
         </div>
