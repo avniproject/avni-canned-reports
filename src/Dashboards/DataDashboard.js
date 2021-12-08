@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import apis from "../api";
 import './DataDashboard.css'
 import FormList from "../components/FormList";
-import {useLocation} from "react-router";
 import Spinner from "../components/Spinner";
 import ActivityPieChart from "../components/ActivityPieChart";
 import _ from 'lodash';

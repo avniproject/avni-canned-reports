@@ -4,7 +4,6 @@ import Spinner from "../components/Spinner";
 import ActivityCalender from "../components/ActivityCalender";
 import ActivityPieChart from "../components/ActivityPieChart";
 import ReportFilters from "../components/ReportFilters";
-import {useLocation} from "react-router";
 
 
 const Activities = ({data}) => {
