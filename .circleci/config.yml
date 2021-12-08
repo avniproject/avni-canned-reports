@@ -86,6 +86,7 @@ jobs:
           root: ~/artifacts
           paths:
             - build_version
+            - build.zip
 
       - store_artifacts:
           path: ~/artifacts
