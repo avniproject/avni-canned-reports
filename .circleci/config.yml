@@ -117,7 +117,7 @@ workflows:
       - STAGING_deploy:
           filters:
             branches:
-              only: master
+              only: main
           requires:
             - app_build
       - PRODUCTION_approve:
