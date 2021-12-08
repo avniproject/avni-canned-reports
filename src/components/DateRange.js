@@ -24,7 +24,7 @@ export default function DateRange({display, onOk}) {
 
     return (
         <Modal open={display}
-               style={{width: '30%', position: 'fixed', top: 55, left: '22%', height: 30, outline: 'none'}}>
+               style={{width: '30%', position: 'fixed', top: '25%', left: '16%', height: 30, outline: 'none'}}>
             <div style={{
                 display: "flex",
                 flexDirection: "column",

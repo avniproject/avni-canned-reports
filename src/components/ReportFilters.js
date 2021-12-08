@@ -43,7 +43,9 @@ export default function ReportFilters({onApply, disableFilter}) {
                 <p>Date</p>
                 <DarkerDisabledTextField
                     margin="dense" style={{height: 52}}
-                    disabled
+                    InputProps={{
+                        readOnly: true,
+                    }}
                     variant="outlined"
                     onClick={() => setOpenPicker(true)}
                     value={getDisplayDate()}/>
