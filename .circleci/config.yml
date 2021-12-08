@@ -3,7 +3,7 @@ commands:
   deploy:
     description: "Deployment of avni-canned-reports"
     parameters:
-      to:
+      hostname:
         type: string
         default: "ssh.staging.openchs.org"
     steps:
