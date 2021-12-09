@@ -65,7 +65,7 @@ export default function ActivitiesReportScreen() {
 
     return (
         <Fragment>
-            <ReportFilters onApply={(queryString) => fetchData(queryString)} disableFilter={loading}/>
+            <ReportFilters onApply={(queryString) => fetchData(queryString)} disableFilter={loading} displayTypeFilter/>
             {loading ? <Spinner/> : <Activities data={activities}/>}
         </Fragment>
     )

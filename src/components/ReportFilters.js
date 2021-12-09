@@ -1,18 +1,17 @@
 import React, {useState, useEffect} from 'react';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
-import DateRange from "./DateRange";
-import {get, isEmpty, isNil, pickBy, identity} from 'lodash';
+import {isNil, pickBy, identity} from 'lodash';
 import moment from "moment";
-import DarkerDisabledTextField from "./DarkerDisabledTextField";
 import {getQueryString} from "../utils";
 import api from "../api";
 import TypeFilters from "./TypeFilters";
-import {Space} from "./Space";
 import Button from "@mui/material/Button";
+import DateFilter from "./DateFilter";
+import Grid from "@mui/material/Grid";
+import AddressLevelsByType from "./AddressLevelsByType";
 
-export default function ReportFilters({onApply, disableFilter}) {
-    const [openPicker, setOpenPicker] = useState(false);
+export default function ReportFilters({onApply, disableFilter, displayTypeFilter}) {
     const [filters, setFilters] = useState({});
     const [operationalModules, setOperationalModules] = useState([]);
 
@@ -23,7 +22,6 @@ export default function ReportFilters({onApply, disableFilter}) {
     const onFilterApply = () => onApply(getQueryString(pickBy(filters, identity)));
 
     const onDateSubmit = (startDate, endDate) => {
-        setOpenPicker(false);
         setFilters({
             ...filters,
             startDate: isNil(startDate) ? '' : moment(startDate).format('YYYY-MM-DD'),
@@ -31,34 +29,24 @@ export default function ReportFilters({onApply, disableFilter}) {
         })
     };
 
-    const getDisplayDate = () => {
-        const startDate = get(filters, 'startDate');
-        const endDate = get(filters, 'endDate');
-        return isEmpty(startDate) ? 'Select Date' : `${startDate} To ${endDate}`;
-    };
-
     return (
-        <div style={{display: 'flex', flexDirection: 'row', margin: 20, alignItems: 'center'}}>
-            <div>
-                <p>Date</p>
-                <DarkerDisabledTextField
-                    margin="dense" style={{height: 52}}
-                    InputProps={{
-                        readOnly: true,
-                    }}
-                    variant="outlined"
-                    onClick={() => setOpenPicker(true)}
-                    value={getDisplayDate()}/>
-            </div>
-            <DateRange display={openPicker} onOk={onDateSubmit}/>
-            <Space/>
-            <TypeFilters operationalModules={operationalModules} onValueChange={setFilters}/>
-            <Space size={15}/>
-            <div style={{marginTop: '50px'}}>
-                <Button variant="contained" color={'primary'} disabled={disableFilter}
-                        onClick={onFilterApply}>Apply</Button>
-            </div>
-        </div>
+        <Grid container direction={'row'} alignItems={'center'} spacing={2}>
+            <Grid item>
+                <DateFilter filters={filters} onDateSubmit={onDateSubmit}/>
+            </Grid>
+            <Grid item>
+                <AddressLevelsByType onValueChange={setFilters}/>
+            </Grid>
+            {displayTypeFilter &&
+            <Grid item>
+                <TypeFilters operationalModules={operationalModules} onValueChange={setFilters}/>
+            </Grid>}
+            <Grid item>
+                <div style={{marginTop: '28px'}}>
+                    <Button variant="contained" color={'primary'} disabled={disableFilter}
+                            onClick={onFilterApply}>Apply</Button>
+                </div>
+            </Grid>
+        </Grid>
     )
-
-}
+};

@@ -1,27 +1,31 @@
 import React from "react";
 import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
+import FormLabel from "@mui/material/FormLabel";
+import _ from "lodash";
+import Select from 'react-select';
 
-const FormItem = (form) => {
-    return (<MenuItem value={form.uuid} key={form.uuid}>{form.name}</MenuItem>)
-};
+const formatOptions = (forms) => _.map(forms, ({uuid, name}) => ({
+    label: name,
+    value: uuid,
+}));
 
-const FormList = ({forms, form, onFormSelect}) => {
+const FormList = ({forms, onFormSelect}) => {
+    const [form, setForm] = React.useState();
+
+    const onChange = (event) => {
+        setForm(event);
+        onFormSelect(event.value);
+    };
+
     return (
-        <FormControl variant="standard" sx={{m: 1, minWidth: 200}} style={{marginRight: "16px"}}>
-            <InputLabel>Choose a Form</InputLabel>
+        <FormControl fullWidth component="fieldset" sx={{width: 400}}>
+            <FormLabel component="legend" sx={{marginBottom: 1}}>{"Choose a Form"}</FormLabel>
             <Select
-                autoWidth
-                label={"Form"}
-                id="forms"
+                isSearchable
+                options={formatOptions(forms)}
+                onChange={onChange}
                 value={form}
-                onChange={(event) => {
-                    onFormSelect(event.target.value)
-                }}>
-                {forms.map((form) => FormItem(form))}
-            </Select>
+            />
         </FormControl>
     )
 };

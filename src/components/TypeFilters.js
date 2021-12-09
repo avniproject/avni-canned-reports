@@ -1,6 +1,9 @@
-import React, {Fragment} from 'react';
+import React from 'react';
 import Select from 'react-select';
 import _ from 'lodash';
+import Grid from "@mui/material/Grid";
+import FormLabel from "@mui/material/FormLabel";
+import FormControl from "@mui/material/FormControl";
 
 //TODO: make program and encounter type filter dependent
 export default function TypeFilters({operationalModules, onValueChange}) {
@@ -30,40 +33,45 @@ export default function TypeFilters({operationalModules, onValueChange}) {
     };
 
     return (
-        <Fragment>
-            <div style={{width: '300px'}}>
-                <p>Subject type</p>
-                <Select
-                    isMulti
-                    name="Subject types"
-                    isSearchable
-                    options={formatOptions(subjectTypes)}
-                    onChange={onSubjectTypeChange}
-                    value={selectedSubjectTypes}
-                />
-            </div>
-            <div style={{width: '300px', marginLeft: '15px'}}>
-                <p>Programs</p>
-                <Select
-                    isMulti
-                    name="Programs"
-                    isSearchable
-                    options={formatOptions(programs)}
-                    onChange={onProgramChange}
-                    value={selectedPrograms}
-                />
-            </div>
-            <div style={{width: '300px', marginLeft: '15px'}}>
-                <p>Encounter types</p>
-                <Select
-                    isMulti
-                    name="Encounter types"
-                    isSearchable
-                    options={formatOptions(encounterTypes)}
-                    onChange={onEncounterTypeChange}
-                    value={selectedEncounterTypes}
-                />
-            </div>
-        </Fragment>
+        <Grid item container spacing={3} alignItems={'center'}>
+            <Grid item>
+                <FormControl fullWidth component="fieldset" sx={{width: 250}}>
+                    <FormLabel component="legend" sx={{marginBottom: 1}}>{"Subject type"}</FormLabel>
+                    <Select
+                        isMulti
+                        isSearchable
+                        options={formatOptions(subjectTypes)}
+                        onChange={onSubjectTypeChange}
+                        value={selectedSubjectTypes}
+                    />
+                </FormControl>
+            </Grid>
+            <Grid item>
+                <FormControl fullWidth component="fieldset" sx={{width: 250}}>
+                    <FormLabel component="legend" sx={{marginBottom: 1}}>{"Programs"}</FormLabel>
+                    <Select
+                        isMulti
+                        name="Programs"
+                        isSearchable
+                        options={formatOptions(programs)}
+                        onChange={onProgramChange}
+                        value={selectedPrograms}
+                    />
+                </FormControl>
+            </Grid>
+            <Grid item>
+                <FormControl fullWidth component="fieldset" sx={{width: 250}}>
+                    <FormLabel component="legend" sx={{marginBottom: 1}}>{"Encounter types"}</FormLabel>
+                    <Select
+                        isMulti
+                        name="Encounter types"
+                        isSearchable
+                        options={formatOptions(encounterTypes)}
+                        onChange={onEncounterTypeChange}
+                        value={selectedEncounterTypes}
+                    />
+                </FormControl>
+            </Grid>
+        </Grid>
     )
 }

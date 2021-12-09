@@ -4,9 +4,12 @@ import './DataDashboard.css'
 import FormList from "../components/FormList";
 import Spinner from "../components/Spinner";
 import ActivityPieChart from "../components/ActivityPieChart";
-import {chunk, isEmpty} from 'lodash';
+import {chunk, isEmpty, filter, includes} from 'lodash';
+import ReportFilters from "../components/ReportFilters";
+import Grid from "@mui/material/Grid";
 
 export default function DataDashboard() {
+    const supportedForms = ['IndividualProfile', 'ProgramEnrolment', 'ProgramEncounter', 'Encounter'];
     const [forms, setForms] = useState([]);
     const [form, setForm] = useState({});
     const [graphData, setGraphData] = useState([]);
@@ -23,25 +26,22 @@ export default function DataDashboard() {
         setError(true);
     };
 
-    useEffect(() => {
-        if (isEmpty(form)) {
-            return;
-        }
+    const fetchData = (queryString = "") => {
         setLoading(true);
         setGraphData([]);
-        apis.fetchFormData(form)
+        apis.fetchFormData(form, queryString)
             .then((graphData) => {
                 setLoading(false);
                 setGraphData(graphData);
                 setError(false);
             }).catch(errorHandler);
-    }, [form]);
+    };
 
 
     useEffect(() => {
         setLoading(true);
-        apis.fetchForms().then(data => {
-            setForms(data);
+        apis.fetchForms().then(forms => {
+            setForms(filter(forms, ({formType}) => includes(supportedForms, formType)));
             setLoading(false);
             setError(false);
         }).catch(errorHandler);
@@ -65,7 +65,17 @@ export default function DataDashboard() {
 
     return (
         <div style={{display: 'flex', flexDirection: 'column', margin: 20, alignItems: 'flexStart'}}>
-            <FormList forms={forms} onFormSelect={setFormInState} form={form.uuid}/>
+            <Grid container direction={'row'} spacing={2}>
+                <Grid item>
+                    <FormList forms={forms} onFormSelect={setFormInState}/>
+                </Grid>
+                <Grid item>
+                    <ReportFilters onApply={(queryString) => fetchData(queryString)}
+                                   disableFilter={loading || isEmpty(form)}/>
+                </Grid>
+            </Grid>
+
+
             {loading && <Spinner/>}
             {error && <p>Something went wrong. Please see console for more details. </p>}
             <div>
