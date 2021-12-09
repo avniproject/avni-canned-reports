@@ -9,7 +9,6 @@ import ReportFilters from "../components/ReportFilters";
 import Grid from "@mui/material/Grid";
 
 export default function DataDashboard() {
-    const supportedForms = ['IndividualProfile', 'ProgramEnrolment', 'ProgramEncounter', 'Encounter'];
     const [forms, setForms] = useState([]);
     const [form, setForm] = useState({});
     const [graphData, setGraphData] = useState([]);
@@ -41,6 +40,7 @@ export default function DataDashboard() {
     useEffect(() => {
         setLoading(true);
         apis.fetchForms().then(forms => {
+            const supportedForms = ['IndividualProfile', 'ProgramEnrolment', 'ProgramEncounter', 'Encounter'];
             setForms(filter(forms, ({formType}) => includes(supportedForms, formType)));
             setLoading(false);
             setError(false);
