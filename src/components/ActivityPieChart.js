@@ -4,6 +4,7 @@ import {isEmpty} from 'lodash';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CircularProgress from "@mui/material/CircularProgress";
+import DateFilterMessage from "./DateFilterMessage";
 
 const Empty = () => {
     return (
@@ -16,7 +17,7 @@ const Empty = () => {
 };
 
 
-export default function ActivityPieChart({data, chartName, height, loading}) {
+export default function ActivityPieChart({data, chartName, height, loading, showDateFilterMessage}) {
 
     const renderData = () => (isEmpty(data) ? <Empty /> :
                 <ResponsivePie
@@ -64,6 +65,7 @@ export default function ActivityPieChart({data, chartName, height, loading}) {
         <div style={{height: height+4, flex: 1}}>
             <Card sx={{width: '90%', height:(height - 4), margin: 4}}>
                 <CardContent style={{height: height}}>
+                    {showDateFilterMessage ? <DateFilterMessage/> : null}
                     <p>{chartName}</p>
                     {loading ? <CircularProgress /> : renderData()}
                 </CardContent>

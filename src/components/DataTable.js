@@ -1,7 +1,10 @@
-import MaterialTable from "@material-table/core";
+import MaterialTable, {MTableToolbar} from "@material-table/core";
 import React from "react";
+import DateFilterMessage from "./DateFilterMessage";
+import {includes} from 'lodash';
 
-const DataTable = ({title, columns, fetchData, onResolve, options}) => {
+const DataTable = ({title, columns, fetchData, onResolve, options, filterQueryString, dateFilterDisabled, ...props}) => {
+    const queryHasDate = includes(filterQueryString, 'startDate');
     return (
         <MaterialTable
             title={title}
@@ -20,12 +23,21 @@ const DataTable = ({title, columns, fetchData, onResolve, options}) => {
                         queryString = "size=" + query.pageSize;
                         queryString += "&page=" + query.page;
                     }
-                    fetchData(queryString)
+                    fetchData(filterQueryString, queryString)
                         .then(data => {
                             resolve(onResolve(data))
                         })
                 })
             }
+            components={{
+                Toolbar: props => (
+                    <div>
+                        {dateFilterDisabled && queryHasDate ? <DateFilterMessage/> : null}
+                        <MTableToolbar {...props} />
+                    </div>
+                ),
+            }}
+            {...props}
         />
     )
 };

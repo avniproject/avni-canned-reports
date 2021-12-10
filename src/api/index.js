@@ -25,14 +25,16 @@ const apis = {
     fetchOperationalModules: () => getData('/web/operationalModules'),
     fetchFormData: (form, queryString) => getData(`/report/aggregate/codedConcepts?formUUID=${form.uuid}&${queryString}`),
     fetchLocations: () => getData('/locations/web/getAll'),
-    fetchUserActivities: () => getData('/report/hr/overallActivities'),
-    fetchUserSyncFailures: () => getData('/report/hr/syncFailures'),
+    fetchUserActivities: (filterQuery) => getData(`/report/hr/overallActivities?${filterQuery}`),
+    fetchUserSyncFailures: (filterQuery) => getData(`/report/hr/syncFailures?${filterQuery}`),
     fetchUserAppVersions: () => getData('/report/hr/appVersions'),
     fetchUserDeviceModels: () => getData('/report/hr/deviceModels'),
-    fetchSyncTelemetry: (queryString) => getData(`/report/syncTelemetry?${queryString}`),
+    fetchUserDetails: (filterQuery) => getData(`/report/hr/userDetails?${filterQuery}`),
+    fetchSyncTelemetry: (filterQuery, queryString) => getData(`/report/syncTelemetry?${queryString}&${filterQuery}`),
     fetchChampionUsers: () => getData('/report/hr/championUsers'),
     fetchNonPerformingUsers: () => getData('/report/hr/nonPerformingUsers'),
     fetchUserCancellingVisits: () => getData('/report/hr/mostCancelled'),
+    fetchUserGroups: () => getData('/web/groups'),
 };
 
 export default apis;

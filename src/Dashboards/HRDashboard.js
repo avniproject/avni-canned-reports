@@ -5,6 +5,7 @@ import ActivityPieChart from "../components/ActivityPieChart";
 import _ from 'lodash';
 import DataTable from "../components/DataTable";
 import moment from "moment";
+import ReportFilters from "../components/ReportFilters";
 
 export default function HrReportScreen() {
 
@@ -13,31 +14,17 @@ export default function HrReportScreen() {
     const [championUsers, setChampionUsers] = useState({loading: true, data: []});
     const [nonPerformingUsers, setNonPerformingUsers] = useState({loading: true, data: []});
     const [mostCancelled, setMostCancelled] = useState({loading: true, data: []});
+    const [queryString, setQueryString] = useState("");
+    const overAllActivityRef = React.createRef();
+    const syncFailureRef = React.createRef();
+    const userDetailsRef = React.createRef();
+    const syncTelemetryRef = React.createRef();
+    const isLoading = deviceModels.loading || appVersions.loading || championUsers.loading || nonPerformingUsers.loading || mostCancelled.loading;
+    const inDateIncludedInFilters = _.includes(queryString, 'startDate');
 
     useEffect(() => {
-        apis.fetchUserDeviceModels()
-            .then(data => setDeviceModels({loading: false, data}));
-    }, []);
-
-    useEffect(() => {
-        apis.fetchUserAppVersions()
-            .then(data => setAppVersions({loading: false, data}));
-    }, []);
-
-    useEffect(() => {
-        apis.fetchChampionUsers()
-            .then(data => setChampionUsers({loading: false, data}))
-    }, []);
-
-    useEffect(() => {
-        apis.fetchNonPerformingUsers()
-            .then(data => setNonPerformingUsers({loading: false, data}))
-    }, []);
-
-    useEffect(() => {
-        apis.fetchUserCancellingVisits()
-            .then(data => setMostCancelled({loading: false, data}))
-    }, []);
+        fetchData();
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     const syncTelemetryColumns = [
         {
@@ -78,11 +65,53 @@ export default function HrReportScreen() {
         },
     ];
 
+    const fetchData = (queryString = "") => {
+        setQueryString(queryString);
+        startLoading();
+        Promise.all([
+            apis.fetchUserDeviceModels(queryString)
+                .then(data => setDeviceModels({loading: false, data})),
+            apis.fetchUserAppVersions(queryString)
+                .then(data => setAppVersions({loading: false, data})),
+            apis.fetchChampionUsers(queryString)
+                .then(data => setChampionUsers({loading: false, data})),
+            apis.fetchNonPerformingUsers(queryString)
+                .then(data => setNonPerformingUsers({loading: false, data})),
+            apis.fetchUserCancellingVisits(queryString)
+                .then(data => setMostCancelled({loading: false, data})),
+        ]);
+    };
+
+    const startLoading = () => {
+        setDeviceModels({loading: true});
+        setAppVersions({loading: true});
+        setChampionUsers({loading: true});
+        setNonPerformingUsers({loading: true});
+        setMostCancelled({loading: true});
+    };
+
+    const refreshTables = () => {
+        overAllActivityRef.current && overAllActivityRef.current.onQueryChange();
+        syncFailureRef.current && syncFailureRef.current.onQueryChange();
+        userDetailsRef.current && userDetailsRef.current.onQueryChange();
+        syncTelemetryRef.current && syncTelemetryRef.current.onQueryChange();
+    };
+
+    const fetchDataAndRefreshTables = (queryString) => {
+        fetchData(queryString);
+        refreshTables();
+    };
+
     return (
-        <div style={{display: 'flex', flexDirection: 'column', margin: 20, alignItems: 'flexStart'}}>
+        <div style={{display: 'flex', flexDirection: 'column', alignItems: 'flexStart'}}>
+            <div style={{marginBottom: 50}}>
+                <ReportFilters displayGroupFilter onApply={(queryString) => fetchDataAndRefreshTables(queryString)}
+                               disableFilter={isLoading}/>
+            </div>
             <Grid container spacing={2} direction={'row'}>
                 <Grid item xs={6}>
                     <DataTable
+                        tableRef={overAllActivityRef}
                         title={'Top 10 users by overall activity'}
                         columns={[
                             {title: 'User', field: 'userName'},
@@ -93,10 +122,12 @@ export default function HrReportScreen() {
                         ]}
                         fetchData={apis.fetchUserActivities}
                         onResolve={data => ({data})}
+                        filterQueryString={queryString}
                     />
                 </Grid>
                 <Grid item xs={6}>
                     <DataTable
+                        tableRef={syncFailureRef}
                         title={'Top 10 users by sync failures'}
                         columns={[
                             {title: 'User', field: 'userName'},
@@ -104,6 +135,7 @@ export default function HrReportScreen() {
                         ]}
                         fetchData={apis.fetchUserSyncFailures}
                         onResolve={data => ({data})}
+                        filterQueryString={queryString}
                     />
                 </Grid>
             </Grid>
@@ -113,29 +145,58 @@ export default function HrReportScreen() {
                         loading={deviceModels.loading}
                         data={deviceModels.data}
                         chartName={'Device models'}
-                        height={350}/>
+                        height={350}
+                        showDateFilterMessage={inDateIncludedInFilters}
+                    />
                 </Grid>
                 <Grid item xs={6}>
                     <ActivityPieChart
                         loading={appVersions.loading}
                         data={appVersions.data}
                         chartName={'App versions'}
-                        height={350}/>
+                        height={350}
+                        showDateFilterMessage={inDateIncludedInFilters}
+                    />
                 </Grid>
             </Grid>
-            <Grid item xs={12}>
-                <DataTable
-                    title={'Sync telemetry'}
-                    options={{paging: true, maxBodyHeight: 500}}
-                    columns={syncTelemetryColumns}
-                    fetchData={apis.fetchSyncTelemetry}
-                    onResolve={data => ({
-                        data: data._embedded.syncTelemetries,
-                        page: data.page.number,
-                        totalCount: data.page.totalElements
-                    })}
-                />
+            <Grid container direction={'column'} spacing={3}>
+                <Grid item>
+                    <DataTable
+                        tableRef={userDetailsRef}
+                        title={'User details'}
+                        dateFilterDisabled
+                        columns={[
+                            {title: 'User', field: 'userName'},
+                            {title: 'App version', field: 'appVersion'},
+                            {title: 'Device model', field: 'deviceModel'},
+                            {
+                                title: 'Last successful sync time',
+                                field: 'lastSuccessfulSync',
+                                render: rowData => moment(rowData.lastSuccessfulSync).format("D/M/YYYY h:mm a")
+                            },
+                        ]}
+                        fetchData={apis.fetchUserDetails}
+                        onResolve={data => ({data})}
+                        filterQueryString={queryString}
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <DataTable
+                        tableRef={syncTelemetryRef}
+                        title={'Sync telemetry'}
+                        options={{paging: true, maxBodyHeight: 500}}
+                        columns={syncTelemetryColumns}
+                        fetchData={apis.fetchSyncTelemetry}
+                        onResolve={data => ({
+                            data: data._embedded.syncTelemetries,
+                            page: data.page.number,
+                            totalCount: data.page.totalElements
+                        })}
+                        filterQueryString={queryString}
+                    />
+                </Grid>
             </Grid>
+
             <Grid container direction={'row'}>
                 <Grid item xs={6}>
                     <ActivityPieChart

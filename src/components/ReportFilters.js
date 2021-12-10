@@ -10,8 +10,9 @@ import Button from "@mui/material/Button";
 import DateFilter from "./DateFilter";
 import Grid from "@mui/material/Grid";
 import AddressLevelsByType from "./AddressLevelsByType";
+import UserGroupFilter from "./UserGroupFilter";
 
-export default function ReportFilters({onApply, disableFilter, displayTypeFilter}) {
+export default function ReportFilters({onApply, disableFilter, displayTypeFilter, displayGroupFilter}) {
     const [filters, setFilters] = useState({});
     const [operationalModules, setOperationalModules] = useState([]);
 
@@ -37,6 +38,10 @@ export default function ReportFilters({onApply, disableFilter, displayTypeFilter
             <Grid item>
                 <AddressLevelsByType onValueChange={setFilters}/>
             </Grid>
+            {displayGroupFilter &&
+            <Grid item>
+                <UserGroupFilter onValueChange={setFilters}/>
+            </Grid>}
             {displayTypeFilter &&
             <Grid item>
                 <TypeFilters operationalModules={operationalModules} onValueChange={setFilters}/>
