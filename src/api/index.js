@@ -24,7 +24,15 @@ const apis = {
     searchConcepts: (queryString) => getData(`/search/concept?${queryString}`),
     fetchOperationalModules: () => getData('/web/operationalModules'),
     fetchFormData: (form, queryString) => getData(`/report/aggregate/codedConcepts?formUUID=${form.uuid}&${queryString}`),
-    fetchLocations: () => getData('/locations/web/getAll')
+    fetchLocations: () => getData('/locations/web/getAll'),
+    fetchUserActivities: () => getData('/report/hr/overallActivities'),
+    fetchUserSyncFailures: () => getData('/report/hr/syncFailures'),
+    fetchUserAppVersions: () => getData('/report/hr/appVersions'),
+    fetchUserDeviceModels: () => getData('/report/hr/deviceModels'),
+    fetchSyncTelemetry: (queryString) => getData(`/report/syncTelemetry?${queryString}`),
+    fetchChampionUsers: () => getData('/report/hr/championUsers'),
+    fetchNonPerformingUsers: () => getData('/report/hr/nonPerformingUsers'),
+    fetchUserCancellingVisits: () => getData('/report/hr/mostCancelled'),
 };
 
 export default apis;

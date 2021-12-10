@@ -3,6 +3,7 @@ import {ResponsivePie} from '@nivo/pie';
 import {isEmpty} from 'lodash';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
+import CircularProgress from "@mui/material/CircularProgress";
 
 const Empty = () => {
     return (
@@ -15,9 +16,9 @@ const Empty = () => {
 };
 
 
-export default function ActivityPieChart({data, chartName, height}) {
+export default function ActivityPieChart({data, chartName, height, loading}) {
 
-    const renderData = () =>
+    const renderData = () => (isEmpty(data) ? <Empty /> :
                 <ResponsivePie
                     data={data}
                     margin={{top: 20, left: 80, bottom: 80, right: 20}}
@@ -57,13 +58,14 @@ export default function ActivityPieChart({data, chartName, height}) {
                         }
                     ]}
                 />
+    );
 
     return (
         <div style={{height: height+4, flex: 1}}>
             <Card sx={{width: '90%', height:(height - 4), margin: 4}}>
                 <CardContent style={{height: height}}>
                     <p>{chartName}</p>
-                    {isEmpty(data) ? <Empty/> : renderData()}
+                    {loading ? <CircularProgress /> : renderData()}
                 </CardContent>
             </Card>
         </div>

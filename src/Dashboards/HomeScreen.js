@@ -34,6 +34,10 @@ function HomeScreen(props) {
         name : 'Data',
         link : '/analytics/data',
         icon : <DeleteIcon/>
+    },{
+        name : 'HR',
+        link : '/analytics/hr',
+        icon : <DeleteIcon/>
     }];
     const drawer = (
         <div>
@@ -41,7 +45,7 @@ function HomeScreen(props) {
             <Divider />
             <List>
                 {menuItems.map(({name, link, icon}, index) => (
-                    <a href={link} style={{ textDecoration: 'none' }}>
+                    <a key={name} href={link} style={{ textDecoration: 'none' }}>
                         <ListItem button key={name}>
                             <ListItemIcon>
                                 {icon}
