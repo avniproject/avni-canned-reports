@@ -47,20 +47,24 @@ export default function DataDashboard() {
         }).catch(errorHandler);
     }, []);
 
-    const renderPair = (pair) => {
+    const renderPair = (pair, index) => {
         return (
-            <div style={{display: 'flex', flexDirection: 'row'}}>
+            <Grid key={index} container direction={'row'} spacing={2}>
                 {pair.map(item => renderGraph(item))}
-            </div>
+            </Grid>
         );
     };
 
-    const renderGraph = (item) => {
-        return (<ActivityPieChart
-            data={item.data}
-            chartName={item.concept.name}
-            height={350}
-        />);
+    const renderGraph = (item, index) => {
+        return (
+            <Grid key={index} item xs={6}>
+                <ActivityPieChart
+                    data={item.data}
+                    chartName={item.concept.name}
+                    height={350}
+                />
+            </Grid>
+        );
     };
 
     return (

@@ -62,8 +62,8 @@ export default function ActivityPieChart({data, chartName, height, loading, show
     );
 
     return (
-        <div style={{height: height+4, flex: 1}}>
-            <Card sx={{width: '90%', height:(height - 4), margin: 4}}>
+        <div style={{height: height+4}}>
+            <Card sx={{width: '100%', height:(height - 4), marginTop: 4}}>
                 <CardContent style={{height: height}}>
                     {showDateFilterMessage ? <DateFilterMessage/> : null}
                     <p>{chartName}</p>

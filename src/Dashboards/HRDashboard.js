@@ -150,7 +150,7 @@ export default function HrReportScreen() {
                     />
                 </Grid>
             </Grid>
-            <Grid container direction={'row'}>
+            <Grid container direction={'row'} spacing={2}>
                 <Grid item xs={6}>
                     <ActivityPieChart
                         loading={deviceModels.loading}
@@ -208,7 +208,7 @@ export default function HrReportScreen() {
                 </Grid>
             </Grid>
 
-            <Grid container direction={'row'}>
+            <Grid container direction={'row'} spacing={2}>
                 <Grid item xs={6}>
                     <ActivityPieChart
                         loading={championUsers.loading}
