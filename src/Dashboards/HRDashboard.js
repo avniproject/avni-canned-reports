@@ -30,7 +30,7 @@ export default function HrReportScreen() {
         if (overAllActivityRef.current) {
             refreshTables();
         }
-    }, [queryString]);
+    }, [queryString]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const syncTelemetryColumns = [
         {
