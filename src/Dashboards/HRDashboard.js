@@ -26,6 +26,12 @@ export default function HrReportScreen() {
         fetchData();
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+    useEffect(() => {
+        if (overAllActivityRef.current) {
+            refreshTables();
+        }
+    }, [queryString]);
+
     const syncTelemetryColumns = [
         {
             title: 'User',
@@ -66,8 +72,6 @@ export default function HrReportScreen() {
     ];
 
     const fetchData = (queryString = "") => {
-        setQueryString(queryString);
-        startLoading();
         Promise.all([
             apis.fetchUserDeviceModels(queryString)
                 .then(data => setDeviceModels({loading: false, data})),
@@ -97,9 +101,16 @@ export default function HrReportScreen() {
         syncTelemetryRef.current && syncTelemetryRef.current.onQueryChange();
     };
 
-    const fetchDataAndRefreshTables = (queryString) => {
-        fetchData(queryString);
-        refreshTables();
+    const fetchDataAndRefreshTables = async (queryString) => {
+        startLoading();
+        let query = queryString;
+        if (_.includes(query, 'locationIds') || _.includes(query, 'groupId')) {
+            const ids = await apis.fetchCommonUserIds(queryString);
+            const userIds = _.isEmpty(ids) ? '0' : _.join(ids, ',');
+            query += `&userIds=${userIds}`;
+        }
+        setQueryString(query);
+        fetchData(query);
     };
 
     return (
@@ -188,7 +199,7 @@ export default function HrReportScreen() {
                         columns={syncTelemetryColumns}
                         fetchData={apis.fetchSyncTelemetry}
                         onResolve={data => ({
-                            data: data._embedded.syncTelemetries,
+                            data: _.defaultTo(_.get(data, '_embedded.syncTelemetries'), []),
                             page: data.page.number,
                             totalCount: data.page.totalElements
                         })}

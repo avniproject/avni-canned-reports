@@ -27,14 +27,15 @@ const apis = {
     fetchLocations: () => getData('/locations/web/getAll'),
     fetchUserActivities: (filterQuery) => getData(`/report/hr/overallActivities?${filterQuery}`),
     fetchUserSyncFailures: (filterQuery) => getData(`/report/hr/syncFailures?${filterQuery}`),
-    fetchUserAppVersions: () => getData('/report/hr/appVersions'),
-    fetchUserDeviceModels: () => getData('/report/hr/deviceModels'),
+    fetchUserAppVersions: (queryString) => getData(`/report/hr/appVersions?${queryString}`),
+    fetchUserDeviceModels: (queryString) => getData(`/report/hr/deviceModels?${queryString}`),
     fetchUserDetails: (filterQuery) => getData(`/report/hr/userDetails?${filterQuery}`),
     fetchSyncTelemetry: (filterQuery, queryString) => getData(`/report/syncTelemetry?${queryString}&${filterQuery}`),
-    fetchChampionUsers: () => getData('/report/hr/championUsers'),
-    fetchNonPerformingUsers: () => getData('/report/hr/nonPerformingUsers'),
-    fetchUserCancellingVisits: () => getData('/report/hr/mostCancelled'),
+    fetchChampionUsers: (queryString) => getData(`/report/hr/championUsers?${queryString}`),
+    fetchNonPerformingUsers: (queryString) => getData(`/report/hr/nonPerformingUsers?${queryString}`),
+    fetchUserCancellingVisits: (queryString) => getData(`/report/hr/mostCancelled?${queryString}`),
     fetchUserGroups: () => getData('/web/groups'),
+    fetchCommonUserIds: (filterQuery) => getData(`/report/hr/commonUserIds?${filterQuery}`)
 };
 
 export default apis;

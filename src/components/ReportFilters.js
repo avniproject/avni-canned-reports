@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
-import {isNil, pickBy, identity} from 'lodash';
+import {isNil, pickBy, identity, isEmpty} from 'lodash';
 import moment from "moment";
 import {getQueryString} from "../utils";
 import api from "../api";
@@ -20,7 +20,7 @@ export default function ReportFilters({onApply, disableFilter, displayTypeFilter
         api.fetchOperationalModules().then(om => setOperationalModules(om))
     }, []);
 
-    const onFilterApply = () => onApply(getQueryString(pickBy(filters, identity)));
+    const onFilterApply = () => onApply(getQueryString(pickBy(pickBy(filters, v => !isEmpty(v)), identity)));
 
     const onDateSubmit = (startDate, endDate) => {
         setFilters({
