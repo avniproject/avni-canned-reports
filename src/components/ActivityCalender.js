@@ -4,8 +4,7 @@ import {maxBy, filter, get, defaultTo} from 'lodash';
 import moment from "moment";
 
 export default function ActivityCalender({data}) {
-    const maxDay = get(maxBy(data,({day}) => moment(day)), 'day');
-    const currentYear = moment(maxDay).year();
+    const currentYear = 2021;
     const from = `${currentYear}-01-01`;
     const to = `${currentYear}-12-01`;
     const maxValue = maxBy(filter(data, ({day}) => moment(day).isBetween(moment(from), moment(to))), ({ value }) => value);
