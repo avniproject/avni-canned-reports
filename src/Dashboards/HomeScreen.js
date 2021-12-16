@@ -14,14 +14,11 @@ import HomeIcon from '@mui/icons-material/Home';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import DeleteIcon from '@mui/icons-material/List';
-import { useNavigate, Link } from 'react-router-dom';
-
+import { Link } from 'react-router-dom';
 
 const drawerWidth = 240;
 
 function HomeScreen(props) {
-    const navigate = useNavigate();
-    const { window } = props;
     const [mobileOpen, setMobileOpen] = React.useState(false);
 
     const handleDrawerToggle = () => {
@@ -58,8 +55,6 @@ function HomeScreen(props) {
         </div>
     );
 
-    const container = window !== undefined ? () => window().document.body : undefined;
-
     return (
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
@@ -74,7 +69,7 @@ function HomeScreen(props) {
                         color="inherit"
                         aria-label="menu"
                         sx={{ mr: 2 }}
-                        onClick={() => navigate('/#/home')}
+                        onClick={() => window.open(`${window.location.origin}/#/home`, "_self")}
                     >
                         <HomeIcon />
                     </IconButton>
@@ -87,7 +82,6 @@ function HomeScreen(props) {
             >
                 {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
                 <Drawer
-                    container={container}
                     variant="temporary"
                     open={mobileOpen}
                     onClose={handleDrawerToggle}
@@ -115,13 +109,5 @@ function HomeScreen(props) {
         </Box>
     );
 }
-
-HomeScreen.propTypes = {
-    /**
-     * Injected by the documentation to work in an iframe.
-     * You won't need it on your project.
-     */
-    window: PropTypes.func,
-};
 
 export default HomeScreen;
