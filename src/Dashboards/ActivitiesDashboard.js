@@ -11,7 +11,7 @@ const Activities = ({data}) => {
     const {completedVisits, registrations, enrolments, daywiseActivities, cancelledVisits, onTimeVisits, programExits} = data;
     return (
         <div style={{display: 'flex', flexDirection: 'column', alignItems: 'flexStart'}}>
-            <p>Day wise activities</p>
+            <p style={{textAlign: 'center'}}>Day wise activities</p>
             <ActivityCalender data={daywiseActivities.data}/>
             <Grid container direction={'row'} spacing={2}>
                 <Grid item xs={6}>

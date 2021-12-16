@@ -1,12 +1,10 @@
 import './App.css';
 import React from "react";
-import HomeScreen from "./Dashboards/HomeScreen";
+import Routes from "./components/Routes";
 
 function App() {
   return (
-    <div className="App">
-      <HomeScreen/>
-    </div>
+      <Routes/>
   );
 }
 

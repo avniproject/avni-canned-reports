@@ -66,7 +66,7 @@ export default function ActivityPieChart({data, chartName, height, loading, show
             <Card sx={{width: '100%', height:(height - 4), marginTop: 4}}>
                 <CardContent style={{height: height}}>
                     {showDateFilterMessage ? <DateFilterMessage/> : null}
-                    <p>{chartName}</p>
+                    <p style={{textAlign: 'center'}}>{chartName}</p>
                     {loading ? <CircularProgress /> : renderData()}
                 </CardContent>
             </Card>

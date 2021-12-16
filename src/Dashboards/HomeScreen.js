@@ -10,15 +10,17 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import MenuIcon from '@mui/icons-material/Menu';
+import HomeIcon from '@mui/icons-material/Home';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import Routes from "../components/Routes";
 import DeleteIcon from '@mui/icons-material/List';
+import { useNavigate, Link } from 'react-router-dom';
+
 
 const drawerWidth = 240;
 
 function HomeScreen(props) {
+    const navigate = useNavigate();
     const { window } = props;
     const [mobileOpen, setMobileOpen] = React.useState(false);
 
@@ -45,14 +47,12 @@ function HomeScreen(props) {
             <Divider />
             <List>
                 {menuItems.map(({name, link, icon}, index) => (
-                    <a key={name} href={link} style={{ textDecoration: 'none' }}>
-                        <ListItem button key={name}>
+                        <ListItem button key={name} component={Link} to={link}>
                             <ListItemIcon>
                                 {icon}
                             </ListItemIcon>
                             <ListItemText primary={name}/>
                         </ListItem>
-                    </a>
                 ))}
             </List>
         </div>
@@ -63,26 +63,21 @@ function HomeScreen(props) {
     return (
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
-            <AppBar
-                position="fixed"
-                sx={{
-                    width: { sm: `calc(100% - ${drawerWidth}px)` },
-                    ml: { sm: `${drawerWidth}px` },
-                }}
-            >
+            <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
                 <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        edge="start"
-                        onClick={handleDrawerToggle}
-                        sx={{ mr: 2, display: { sm: 'none' } }}
-                    >
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography variant="h6" noWrap component="div">
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         Avni Canned Analytics
                     </Typography>
+                    <IconButton
+                        size="large"
+                        edge="start"
+                        color="inherit"
+                        aria-label="menu"
+                        sx={{ mr: 2 }}
+                        onClick={() => navigate('/#/home')}
+                    >
+                        <HomeIcon />
+                    </IconButton>
                 </Toolbar>
             </AppBar>
             <Box
@@ -116,14 +111,6 @@ function HomeScreen(props) {
                 >
                     {drawer}
                 </Drawer>
-            </Box>
-            <Box
-                component="main"
-                sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
-            >
-                <Box style={{marginTop: 100}}>
-                    <Routes/>
-                </Box>
             </Box>
         </Box>
     );
