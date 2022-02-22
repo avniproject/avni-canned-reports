@@ -1,21 +1,31 @@
 import React, {Fragment, useEffect, useState} from 'react';
 import apis from '../api';
-import Spinner from "../components/Spinner";
 import ActivityCalender from "../components/ActivityCalender";
 import ActivityPieChart from "../components/ActivityPieChart";
 import ReportFilters from "../components/ReportFilters";
 import Grid from "@mui/material/Grid";
+import {map} from 'lodash';
 
-
-const Activities = ({data}) => {
-    const {completedVisits, registrations, enrolments, daywiseActivities, cancelledVisits, onTimeVisits, programExits} = data;
+const Activities = ({
+                        daywiseActivities,
+                        registrations,
+                        enrolments,
+                        completedVisits,
+                        cancelledVisits,
+                        onTimeVisits,
+                        programExits
+                    }) => {
     return (
         <div style={{display: 'flex', flexDirection: 'column', alignItems: 'flexStart'}}>
-            <p style={{textAlign: 'center'}}>Day wise activities</p>
-            <ActivityCalender data={daywiseActivities.data}/>
+            <ActivityCalender
+                data={daywiseActivities.data}
+                title={'Day wise activities'}
+                loading={daywiseActivities.loading}
+            />
             <Grid container direction={'row'} spacing={2}>
                 <Grid item xs={6}>
                     <ActivityPieChart
+                        loading={registrations.loading}
                         data={registrations.data}
                         chartName={'Registrations'}
                         height={350}
@@ -23,6 +33,7 @@ const Activities = ({data}) => {
                 </Grid>
                 <Grid item xs={6}>
                     <ActivityPieChart
+                        loading={enrolments.loading}
                         data={enrolments.data}
                         chartName={'Program enrolments'}
                         height={350}
@@ -32,6 +43,7 @@ const Activities = ({data}) => {
             <Grid container direction={'row'} spacing={2}>
                 <Grid item xs={6}>
                     <ActivityPieChart
+                        loading={programExits.loading}
                         data={programExits.data}
                         chartName={'Program exits'}
                         height={350}
@@ -39,6 +51,7 @@ const Activities = ({data}) => {
                 </Grid>
                 <Grid item xs={6}>
                     <ActivityPieChart
+                        loading={completedVisits.loading}
                         data={completedVisits.data}
                         chartName={'Visits'}
                         height={350}
@@ -48,6 +61,7 @@ const Activities = ({data}) => {
             <Grid container direction={'row'} spacing={2}>
                 <Grid item xs={6}>
                     <ActivityPieChart
+                        loading={onTimeVisits.loading}
                         data={onTimeVisits.data}
                         chartName={'On time visits'}
                         height={350}
@@ -55,6 +69,7 @@ const Activities = ({data}) => {
                 </Grid>
                 <Grid item xs={6}>
                     <ActivityPieChart
+                        loading={cancelledVisits.loading}
                         data={cancelledVisits.data}
                         chartName={'Cancelled visits'}
                         height={350}
@@ -67,15 +82,31 @@ const Activities = ({data}) => {
 
 export default function ActivitiesReportScreen() {
 
-    const [activities, setActivities] = useState({});
+    const [daywiseActivities, setDaywiseActivities] = useState({loading: true, data: []});
+    const [registrations, setRegistrations] = useState({loading: true, data: []});
+    const [enrolments, setEnrolments] = useState({loading: true, data: []});
+    const [completedVisits, setCompletedVisits] = useState({loading: true, data: []});
+    const [cancelledVisits, setCancelledVisits] = useState({loading: true, data: []});
+    const [onTimeVisits, setOnTimeVisits] = useState({loading: true, data: []});
+    const [programExits, setProgramExits] = useState({loading: true, data: []});
     const [loading, setLoading] = useState(true);
+    const activityTypeToDispatcherMap = {
+        "daywiseActivities": setDaywiseActivities,
+        "registrations": setRegistrations,
+        "enrolments": setEnrolments,
+        "onTimeVisits": setOnTimeVisits,
+        "programExits": setProgramExits,
+        "completedVisits": setCompletedVisits,
+        "cancelledVisits": setCancelledVisits,
+    };
 
     function fetchData(queryString = "") {
-        setLoading(true);
-        apis.fetchActivities(queryString).then(data => {
-            setActivities(data);
-            setLoading(false);
-        })
+        Promise.all(map(
+            activityTypeToDispatcherMap,
+            (setState, type) => Promise.resolve(
+                apis.fetchActivity(type, queryString).then(({data}) => setState({loading: false, data}))
+            ))
+        ).then(() => setLoading(false));
     }
 
     useEffect(() => {
@@ -85,7 +116,15 @@ export default function ActivitiesReportScreen() {
     return (
         <Fragment>
             <ReportFilters onApply={(queryString) => fetchData(queryString)} disableFilter={loading} displayTypeFilter/>
-            {loading ? <Spinner/> : <Activities data={activities}/>}
+            <Activities
+                daywiseActivities={daywiseActivities}
+                registrations={registrations}
+                enrolments={enrolments}
+                completedVisits={completedVisits}
+                cancelledVisits={cancelledVisits}
+                onTimeVisits={onTimeVisits}
+                programExits={programExits}
+            />
         </Fragment>
     )
 }
