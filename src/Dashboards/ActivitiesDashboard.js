@@ -111,6 +111,7 @@ export default function ActivitiesReportScreen() {
 
     useEffect(() => {
         fetchData();
+        // eslint-disable-next-line
     }, []);
 
     return (

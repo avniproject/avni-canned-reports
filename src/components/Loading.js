@@ -1,4 +1,4 @@
-import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
+import CircularProgress from "@mui/material/CircularProgress";
 import React from "react";
 
 export const Loading = () => (
