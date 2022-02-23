@@ -1,6 +1,6 @@
 import React from 'react';
 import {ResponsivePie} from '@nivo/pie';
-import {isEmpty} from 'lodash';
+import {isEmpty, size} from 'lodash';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import DateFilterMessage from "./DateFilterMessage";
@@ -18,6 +18,8 @@ const Empty = () => {
 
 
 export default function ActivityPieChart({data, chartName, height, loading, showDateFilterMessage}) {
+    const legendCount = size(data);
+    const cardHeight = legendCount > 12 ? height + (14.5 * (legendCount - 12)) : height;
 
     const renderData = () => (isEmpty(data) ? <Empty/> :
             <ResponsivePie
@@ -29,7 +31,7 @@ export default function ActivityPieChart({data, chartName, height, loading, show
                 activeOuterRadiusOffset={8}
                 borderWidth={1}
                 borderColor={{from: 'color', modifiers: [['darker', 0.2]]}}
-                arcLinkLabelsSkipAngle={10}
+                arcLinkLabelsSkipAngle={15}
                 arcLinkLabelsTextColor="#333333"
                 arcLinkLabelsThickness={2}
                 arcLinkLabelsColor={{from: 'color'}}
@@ -63,8 +65,9 @@ export default function ActivityPieChart({data, chartName, height, loading, show
 
     return (
         <div style={{height: height + 4}}>
-            <Card sx={{width: '100%', height: (height - 4), marginTop: 4}} elevation={2}>
-                <CardContent style={{height: height}}>
+            <Card sx={[{width: '100%', height: (height - 4), marginTop: 4}, legendCount > 12 && {overflowY: 'scroll'}]}
+                  elevation={2}>
+                <CardContent style={{height: cardHeight}}>
                     {showDateFilterMessage ? <DateFilterMessage/> : null}
                     <p style={{textAlign: 'center'}}>{chartName}</p>
                     {loading ? <Loading/> : renderData()}
