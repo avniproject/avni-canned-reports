@@ -11,15 +11,13 @@ export default function HrReportScreen() {
 
     const [deviceModels, setDeviceModels] = useState({loading: true, data: []});
     const [appVersions, setAppVersions] = useState({loading: true, data: []});
-    const [championUsers, setChampionUsers] = useState({loading: true, data: []});
-    const [nonPerformingUsers, setNonPerformingUsers] = useState({loading: true, data: []});
-    const [mostCancelled, setMostCancelled] = useState({loading: true, data: []});
     const [queryString, setQueryString] = useState("");
     const overAllActivityRef = React.createRef();
     const syncFailureRef = React.createRef();
     const userDetailsRef = React.createRef();
     const syncTelemetryRef = React.createRef();
-    const isLoading = deviceModels.loading || appVersions.loading || championUsers.loading || nonPerformingUsers.loading || mostCancelled.loading;
+    const medianSyncRef = React.createRef();
+    const isLoading = deviceModels.loading || appVersions.loading;
     const inDateIncludedInFilters = _.includes(queryString, 'startDate');
 
     useEffect(() => {
@@ -36,7 +34,6 @@ export default function HrReportScreen() {
         {
             title: 'User',
             field: 'userName',
-            render: rowData => _.get(rowData, '_links.userName.href')
         },
         {
             title: 'Android version',
@@ -47,19 +44,18 @@ export default function HrReportScreen() {
             field: 'appVersion',
         },
         {
-            title: 'Device brand',
-            field: 'deviceInfo',
-            render: rowData => _.defaultTo(_.get(rowData, 'deviceInfo.brand'), rowData.deviceName)
+            title: 'Device name',
+            field: 'deviceModel',
         },
         {
             title: 'Sync start time',
-            field: 'syncStartTime',
-            render: rowData => moment(rowData.syncStartTime).format("D/M/YYYY h:mm a")
+            field: 'syncStart',
+            render: rowData => moment(rowData.syncStart).format("D/M/YYYY h:mm a")
         },
         {
             title: 'Sync end time',
-            field: 'syncEndTime',
-            render: rowData => rowData.syncEndTime ? moment(rowData.syncEndTime).format("D/M/YYYY h:mm a") : ''
+            field: 'syncEnd',
+            render: rowData => moment(rowData.syncEnd).format("D/M/YYYY h:mm a") 
         },
         {
             title: 'Sync status',
@@ -77,21 +73,12 @@ export default function HrReportScreen() {
                 .then(data => setDeviceModels({loading: false, data})),
             apis.fetchUserAppVersions(queryString)
                 .then(data => setAppVersions({loading: false, data})),
-            apis.fetchChampionUsers(queryString)
-                .then(data => setChampionUsers({loading: false, data})),
-            apis.fetchNonPerformingUsers(queryString)
-                .then(data => setNonPerformingUsers({loading: false, data})),
-            apis.fetchUserCancellingVisits(queryString)
-                .then(data => setMostCancelled({loading: false, data})),
         ]);
     };
 
     const startLoading = () => {
         setDeviceModels({loading: true});
         setAppVersions({loading: true});
-        setChampionUsers({loading: true});
-        setNonPerformingUsers({loading: true});
-        setMostCancelled({loading: true});
     };
 
     const refreshTables = () => {
@@ -99,6 +86,7 @@ export default function HrReportScreen() {
         syncFailureRef.current && syncFailureRef.current.onQueryChange();
         userDetailsRef.current && userDetailsRef.current.onQueryChange();
         syncTelemetryRef.current && syncTelemetryRef.current.onQueryChange();
+        medianSyncRef.current && medianSyncRef.current.onQueryChange();
     };
 
     const fetchDataAndRefreshTables = async (queryString) => {
@@ -120,10 +108,10 @@ export default function HrReportScreen() {
                                disableFilter={isLoading}/>
             </div>
             <Grid container spacing={2} direction={'row'}>
-                <Grid item xs={6}>
+                <Grid item xs={7}>
                     <DataTable
                         tableRef={overAllActivityRef}
-                        title={'Top 10 users by overall activity'}
+                        title={'Top 10 users by Overall Activity'}
                         columns={[
                             {title: 'User', field: 'userName'},
                             {title: 'Registrations', field: 'registrationCount'},
@@ -136,10 +124,10 @@ export default function HrReportScreen() {
                         filterQueryString={queryString}
                     />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={5}>
                     <DataTable
                         tableRef={syncFailureRef}
-                        title={'Top 10 users by sync failures'}
+                        title={'Top 10 users by Sync Failures'}
                         columns={[
                             {title: 'User', field: 'userName'},
                             {title: 'Total Sync failures', field: 'count'}
@@ -170,8 +158,8 @@ export default function HrReportScreen() {
                     />
                 </Grid>
             </Grid>
-            <Grid container direction={'column'} spacing={3}>
-                <Grid item>
+            <Grid container spacing={3}>
+                <Grid item xs={12}>
                     <DataTable
                         tableRef={userDetailsRef}
                         title={'User details'}
@@ -194,43 +182,41 @@ export default function HrReportScreen() {
                 <Grid item xs={12}>
                     <DataTable
                         tableRef={syncTelemetryRef}
-                        title={'Sync telemetry'}
-                        options={{paging: true, maxBodyHeight: 500}}
+                        title={'Sync telemetry - Latest Syncs'}
                         columns={syncTelemetryColumns}
                         fetchData={apis.fetchSyncTelemetry}
-                        onResolve={data => ({
-                            data: _.defaultTo(_.get(data, '_embedded.syncTelemetries'), []),
-                            page: data.page.number,
-                            totalCount: data.page.totalElements
-                        })}
+                        onResolve={data => ({data})}
+                        filterQueryString={queryString}
+                    />
+                </Grid>
+                <Grid item xs={6}>
+                    <DataTable
+                        tableRef={medianSyncRef}
+                        title={'Week-wise Median Sync Time (past 3 months) '}
+                        columns={[
+                            {
+                                title: 'Start Date', 
+                                field: 'syncStart',
+                                render: rowData => moment(rowData.syncStart).format("D/M/YYYY")
+                            },
+                            {
+                                title: 'End Date', 
+                                field: 'syncEnd',
+                                render: rowData => moment(rowData.syncEnd).format("D/M/YYYY")
+                            },
+                            {
+                                title: 'Median Sync Time', 
+                                field: 'medianSync',
+                                render: rowData => (rowData.medianSync.replace(":"," hrs, ").replace(":"," mins and ") + " secs")
+                            }
+                        ]}
+                        fetchData={apis.fetchMedianSync}
+                        onResolve={data => ({data})}
                         filterQueryString={queryString}
                     />
                 </Grid>
             </Grid>
-
-            <Grid container direction={'row'} spacing={2}>
-                <Grid item xs={6}>
-                    <ActivityPieChart
-                        loading={championUsers.loading}
-                        data={championUsers.data}
-                        chartName={'Users with more than 80 % visits completed on time'}
-                        height={350}/>
-                </Grid>
-                <Grid item xs={6}>
-                    <ActivityPieChart
-                        loading={nonPerformingUsers.loading}
-                        data={nonPerformingUsers.data}
-                        chartName={'Users with less than 50 % visits completed on time'}
-                        height={350}/>
-                </Grid>
-            </Grid>
-            <Grid item xs={6}>
-                <ActivityPieChart
-                    loading={mostCancelled.loading}
-                    data={mostCancelled.data}
-                    chartName={'Top 5 users with most cancelled visits'}
-                    height={350}/>
-            </Grid>
+            
         </div>
     )
 }
