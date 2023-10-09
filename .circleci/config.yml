@@ -99,6 +99,14 @@ jobs:
       - deploy:
           hostname: "ssh.staging.openchs.org"
 
+  PRERELEASE_deploy:
+    docker:
+      - image: cimg/node:15.0.1
+    working_directory: ~/
+    steps:
+      - deploy:
+          hostname: "ssh.prerelease.openchs.org"
+
   PRODUCTION_deploy:
     docker:
       - image: cimg/node:15.0.1
@@ -115,14 +123,27 @@ workflows:
       - app_build:
           requires:
             - app_test
-      - STAGING_deploy:
+      - STAGING_approve:
           type: approval
           requires:
             - app_build
+      - STAGING_deploy:
+          context: non-prod-deploy
+          requires:
+            - STAGING_approve
+      - PRERELEASE_approve:
+          type: approval
+          requires:
+            - app_build
+      - PRERELEASE_deploy:
+          context: non-prod-deploy
+          requires:
+            - PRERELEASE_approve
       - PRODUCTION_approve:
           type: approval
           requires:
             - app_build
       - PRODUCTION_deploy:
+          context: prod-deploy
           requires:
             - PRODUCTION_approve
