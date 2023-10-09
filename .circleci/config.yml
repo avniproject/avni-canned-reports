@@ -34,7 +34,7 @@ commands:
 jobs:
   app_test:
     docker:
-      - image: cimg/node:15.0.0
+      - image: cimg/node:15.0.1
 
     working_directory: ~/avni-canned-reports
 
@@ -55,7 +55,7 @@ jobs:
 
   app_build:
     docker:
-      - image: cimg/node:15.0.0
+      - image: cimg/node:15.0.1
 
     working_directory: ~/avni-canned-reports
 
@@ -93,7 +93,7 @@ jobs:
 
   STAGING_deploy:
     docker:
-      - image: cimg/node:15.0.0
+      - image: cimg/node:15.0.1
     working_directory: ~/
     steps:
       - deploy:
@@ -101,7 +101,7 @@ jobs:
 
   PRODUCTION_deploy:
     docker:
-      - image: cimg/node:15.0.0
+      - image: cimg/node:15.0.1
     working_directory: ~/
     steps:
       - deploy:
