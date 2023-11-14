@@ -1,8 +1,7 @@
 {
   "name": "avni-canned-reports",
   "version": "1.0.3",
-  "private": false,
-  "proxy": "http://localhost:8021",
+  "proxy": "http://localhost:8022",
   "homepage": "/analytics",
   "dependencies": {
     "@emotion/react": "^11.6.0",
@@ -15,6 +14,7 @@
     "@nivo/bar": "^0.74.0",
     "@nivo/calendar": "^0.74.0",
     "@nivo/core": "^0.74.0",
+    "@nivo/line": "^0.83.0",
     "@nivo/pie": "^0.74.0",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
@@ -35,6 +35,7 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
+    "start-with-prerelease": "BACKEND_URL=https://prerelease.avniproject.org react-scripts --max_old_space_size=2048 start",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

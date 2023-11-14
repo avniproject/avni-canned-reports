@@ -17,3 +17,8 @@ test: check-node-v
 
 build: check-node-v
 	yarn run build
+
+start-with-prerelease:
+	cp env_templates/.env.prerelease.local.template .env.development.local
+	yarn start-with-prerelease
+
